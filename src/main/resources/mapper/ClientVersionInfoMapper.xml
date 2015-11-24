@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solodream.spring.vertx.mapper.ClientVersionInfoMapper">
+
+    <resultMap id="ClientVersionInfoMap" type="com.solodream.spring.vertx.jpa.domain.ClientVersionInfoDto">
+        <result column="ID" property="id" />
+        <result column="VERSION_CODE" property="versionCode" />
+        <result column="VERSION_NAME" property="versionName" />
+        <result column="DESCRIPTION" property="description" />
+        <result column="UPGRADE_TYPE" property="upgradeType" />
+        <result column="IS_DELETED" property="isDeleted" />
+        <result column="GMT_CREATED" property="gmtCreated" />
+        <result column="GMT_MODIFIED" property="gmtModified" />
+        <result column="EXTEND" property="extend" />
+    </resultMap>
+
+    <sql id="tableName">
+        TB_CLIENT_VERSION_INFO
+    </sql>
+
+    <sql id="allColumns">
+        ID, VERSION_CODE, VERSION_NAME, DESCRIPTION, UPGRADE_TYPE,  IS_DELETED, GMT_CREATED, GMT_MODIFIED, EXTEND
+    </sql>
+
+
+    <select id="query" parameterType="Map" resultMap="ClientVersionInfoMap">
+        SELECT
+            <include refid="allColumns" />
+        FROM
+            <include refid="tableName" />
+        <include refid="where"/>
+        ORDER BY
+            ID DESC
+        LIMIT
+            1
+    </select>
+
+
+
+    <sql id="where">
+        WHERE IS_DELETED = 0
+        <if test="clientVersionInfo != null">
+            <if test="clientVersionInfo.versionCode != null"> AND VERSION_CODE = #{clientVersionInfo.versionCode}</if>
+            <if test="clientVersionInfo.versionName != null"> AND VERSION_NAME = #{clientVersionInfo.versionName}</if>
+            <if test="clientVersionInfo.description != null"> AND DESCRIPTION = #{clientVersionInfo.description}</if>
+            <if test="clientVersionInfo.upgradeType != null"> AND UPGRADE_TYPE = #{clientVersionInfo.upgradeType}</if>
+            <if test="clientVersionInfo.extend != null"> AND EXTEND = #{clientVersionInfo.extend}</if>
+        </if>
+        <if test="keyword != null">
+        </if>
+    </sql>
+
+    <!-- ======================================= custom method ======================================= -->
+
+    <select id="getLastClientVersionInfoDto" resultMap="ClientVersionInfoMap">
+        SELECT
+            <include refid="allColumns" />
+        FROM
+            <include refid="tableName" />
+        WHERE
+            IS_DELETED = 0
+        AND
+            VERSION_CODE > #{versionCode}
+        ORDER BY
+            VERSION_CODE DESC
+    </select>
+
+</mapper>

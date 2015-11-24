@@ -46,6 +46,19 @@ public class HttpServerVerticle extends AbstractVerticle {
                         }
                     });
                 });
+
+
+        router.route("/version").handler(
+                req -> {
+                    LOGGER.info("Received a http request");
+                    String version = req.request().getParam("version");
+                    vertx.eventBus().send("version", version, ar -> {
+                        if (ar.succeeded()) {
+                            LOGGER.info("Received reply: " + ar.result().body());
+                            req.response().end((String) ar.result().body());
+                        }
+                    });
+                });
         vertx.createHttpServer().requestHandler(router::accept).listen(18080);
         LOGGER.info("Started HttpServer(port=18080).");
     }
