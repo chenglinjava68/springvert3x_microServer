@@ -6,7 +6,7 @@ The Vert.x SpringBoot Example shows how you can embed Vert.x in a SpringBoot app
 - [Vertx 3.0](http://vertx.io/)
 
 ## Requirements
-    2. maven and jdk 8
+     $ maven and jdk 8
     
 ## Building from Source
 
