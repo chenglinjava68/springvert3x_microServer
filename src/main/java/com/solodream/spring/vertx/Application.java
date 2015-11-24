@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.solodream.spring.vertx.vertx.HttpServerVerticle;
 import com.solodream.spring.vertx.vertx.LoginVerticle;
 import com.solodream.spring.vertx.vertx.SmsVerticle;
+import com.solodream.spring.vertx.vertx.VersionVerticle;
 import io.vertx.core.DeploymentOptions;
 import io.vertx.core.Vertx;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,7 @@ public class Application {
         final Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(context.getBean(LoginVerticle.class), new DeploymentOptions().setWorker(true));
         vertx.deployVerticle(context.getBean(SmsVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(VersionVerticle.class), new DeploymentOptions().setWorker(true));
         vertx.deployVerticle(context.getBean(HttpServerVerticle.class));
     }
 }
