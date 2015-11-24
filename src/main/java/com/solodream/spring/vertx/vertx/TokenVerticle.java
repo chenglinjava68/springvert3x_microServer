@@ -1,7 +1,5 @@
 package com.solodream.spring.vertx.vertx;
 
-import com.alibaba.fastjson.JSON;
-import com.solodream.spring.vertx.jpa.domain.ClientVersionInfoDto;
 import com.solodream.spring.vertx.service.ClientService;
 import io.vertx.core.AbstractVerticle;
 import org.slf4j.Logger;
@@ -10,30 +8,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 /**
- * VersionVerticle
+ * TokenVerticle
  *
  * @author Young
  * @date 2015/11/24 0024
  */
 @Component
-public class VersionVerticle extends AbstractVerticle {
-    private static final Logger LOGGER = LoggerFactory.getLogger(VersionVerticle.class);
+public class TokenVerticle extends AbstractVerticle {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SmsVerticle.class);
 
     @Autowired
     private ClientService clientService;
 
-
     public void start() {
-        LOGGER.info("start... check Version");
+        LOGGER.info("start.");
 
-        vertx.eventBus().consumer("version", message -> {
+        vertx.eventBus().consumer("token", message -> {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
                 //semd message
-                String version = (String) message.body();
-                LOGGER.debug("VERSION > " + version);
-                ClientVersionInfoDto infoDto = clientService.getLastClientVersionInfoDto(Integer.valueOf(version));
-                message.reply(JSON.toJSONString(infoDto));
+
+                message.reply("success");
             } catch (Exception e) {
                 LOGGER.error("convert error.", e);
             }
