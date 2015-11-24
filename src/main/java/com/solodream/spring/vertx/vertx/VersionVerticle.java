@@ -6,6 +6,7 @@ import io.vertx.core.AbstractVerticle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * VersionVerticle
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @author Young
  * @date 2015/11/24 0024
  */
+@Component
 public class VersionVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(VersionVerticle.class);
 
