@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.solodream.spring.vertx.mapper.ClientAccountInfoMapper">
+
+    <resultMap id="TbContractInfoInfoMap" type="com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto">
+
+        <result column="NO" property="no"/>
+        <result column="ORG_ID" property="orgId"/>
+        <result column="IS_DELETED" property="isDeleted"/>
+        <result column="ORG_NAME" property="orgName"/>
+        <result column="EXTEND" property="extend"/>
+        <result column="CUSTOMER_ID" property="customerId"/>
+        <result column="END_DATE" property="endDate"/>
+        <result column="START_DATE" property="startDate"/>
+        <result column="ACCOUNT" property="account"/>
+        <result column="CUSTOMER_NAME" property="customerName"/>
+        <result column="PASSWORD" property="password"/>
+        <result column="GMT_CREATED" property="gmtCreated"/>
+        <result column="GMT_MODIFIED" property="gmtModified"/>
+        <result column="ID" property="id"/>
+        <result column="REMARK" property="remark"/>
+    </resultMap>
+    <sql id="tableName">
+        tb_contract_info
+    </sql>
+    <sql id="allColumns">
+     ID,NO,ORG_ID,ORG_NAME,START_DATE,END_DATE,REMARK,IS_DELETED,GMT_CREATED,GMT_MODIFIED,EXTEND,CUSTOMER_ID,CUSTOMER_NAME,ACCOUNT,PASSWORD</sql>
+
+
+    <select id="get" resultMap="TbContractInfoInfoMap">
+        SELECT
+        <include refid="allColumns"/>
+        FROM
+        <include refid="tableName"/>
+        WHERE
+        ID = #{id}
+        AND
+        IS_DELETED = 0
+        LIMIT
+        1
+    </select>
+
+
+
+    <select id="query" parameterType="Map" resultMap="TbContractInfoInfoMap">
+        SELECT
+        <include refid="allColumns"/>
+        FROM
+        <include refid="tableName"/>
+        <include refid="where"/>
+        ORDER BY
+        ID DESC
+        LIMIT
+        1
+    </select>
+
+    <select id="count" parameterType="Map" resultType="int">
+        SELECT
+        COUNT(0)
+        FROM
+        <include refid="tableName"/>
+        <include refid="where"/>
+    </select>
+
+
+    <sql id="where">
+        WHERE IS_DELETED = 0
+        <if test="tbContractInfo != null">
+            <if test="tbContractInfo.no != null">AND NO = #{tbContractInfo.no}</if>
+            <if test="tbContractInfo.orgId != null">AND ORG_ID = #{tbContractInfo.orgId}</if>
+            <if test="tbContractInfo.isDeleted != null">AND IS_DELETED = #{tbContractInfo.isDeleted}</if>
+            <if test="tbContractInfo.orgName != null">AND ORG_NAME = #{tbContractInfo.orgName}</if>
+            <if test="tbContractInfo.extend != null">AND EXTEND = #{tbContractInfo.extend}</if>
+            <if test="tbContractInfo.customerId != null">AND CUSTOMER_ID = #{tbContractInfo.customerId}</if>
+            <if test="tbContractInfo.endDate != null">AND END_DATE = #{tbContractInfo.endDate}</if>
+            <if test="tbContractInfo.startDate != null">AND START_DATE = #{tbContractInfo.startDate}</if>
+            <if test="tbContractInfo.account != null">AND ACCOUNT = #{tbContractInfo.account}</if>
+            <if test="tbContractInfo.customerName != null">AND CUSTOMER_NAME = #{tbContractInfo.customerName}</if>
+            <if test="tbContractInfo.password != null">AND PASSWORD = #{tbContractInfo.password}</if>
+            <if test="tbContractInfo.gmtCreated != null">AND GMT_CREATED = #{tbContractInfo.gmtCreated}</if>
+            <if test="tbContractInfo.gmtModified != null">AND GMT_MODIFIED = #{tbContractInfo.gmtModified}</if>
+            <if test="tbContractInfo.id != null">AND ID = #{tbContractInfo.id}</if>
+            <if test="tbContractInfo.remark != null">AND REMARK = #{tbContractInfo.remark}</if>
+        </if>
+        <if test="keyword != null">
+        </if>
+    </sql>
+
+    <!-- ======================================= custom method ======================================= -->
+</mapper>
