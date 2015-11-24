@@ -1,4 +1,4 @@
-# Spring Boot And Vertx
+# 基于Vert3.x的micro server的微服务平台
 
 The Vert.x SpringBoot Example shows how you can embed Vert.x in a SpringBoot application.
 
@@ -10,19 +10,12 @@ The Vert.x SpringBoot Example shows how you can embed Vert.x in a SpringBoot app
     
 ## Building from Source
 
-Clone the git repository using the URL on the github home page:
-
-    $ git clone https://github.com/cneftali/spring-boot-vertx.git
-    $ cd spring-boot-vertx
-    $ mvn clean install
+     $ mvn clean install -Dmaven.test.skip=true -X
     
 ## Test
+
     
-    # 1. launch
-    
-     $ mvn spring-boot:run
+     $ mvn spring-boot:run -X
      
-    # 2. Try it!
-    
-     $ curl http://localhost:8080/customer
+
     
