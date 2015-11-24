@@ -1,8 +1,6 @@
 package com.solodream.spring.vertx.req;
 
 
-import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
-
 /**
  * RequestThreadLocal
  *
@@ -23,15 +21,15 @@ public class RequestThreadLocal {
         return utl;
     }
 
-    private final static ThreadLocal<ClientAccountInfoDto> _currentUser = new ThreadLocal<ClientAccountInfoDto>();
+    private final static ThreadLocal<String> _currentUser = new ThreadLocal<String>();
 
     private final static ThreadLocal<String> _currentLang = new ThreadLocal<String>();
 
-    public ClientAccountInfoDto getUser() {
+    public String getUser() {
         return _currentUser.get();
     }
 
-    public void setUser(ClientAccountInfoDto user) {
+    public void setUser(String user) {
         _currentUser.set(user);
     }
 

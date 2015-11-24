@@ -1,5 +1,7 @@
 package com.solodream.spring.vertx.vertx;
 
+import com.solodream.spring.vertx.req.ReqHandle;
+import com.solodream.spring.vertx.req.RequestThreadLocal;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -27,6 +29,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                     String password = req.request().getParam("password");
                     vertx.eventBus().send("login", name, ar -> {
                         if (ar.succeeded()) {
+                            ReqHandle.setOperator(req.session(), (String) ar.result().body());
                             LOGGER.info("Received reply: " + ar.result().body());
                             req.response().end((String) ar.result().body());
                         }
@@ -36,6 +39,12 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         router.route("/sms").handler(
                 req -> {
+
+                    RequestThreadLocal reqThreadLocal = ReqHandle.bindRequest(req.session());
+
+                    if (reqThreadLocal.getUser() != null) {
+                        LOGGER.debug("user can access into our website");
+                    }
                     LOGGER.info("Received a http request");
                     String name = req.request().getParam("username");
                     String password = req.request().getParam("password");
