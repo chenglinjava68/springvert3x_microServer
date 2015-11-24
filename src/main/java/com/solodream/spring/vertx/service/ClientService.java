@@ -20,6 +20,10 @@ public class ClientService {
         ClientAccountInfoDto dto = new ClientAccountInfoDto();
         dto.setAccount(account);
         dto = clientAccountInfoMapper.query(dto);
-        return true;
+        boolean mark = false;
+        if (dto != null) {
+            mark = true;
+        }
+        return mark;
     }
 }

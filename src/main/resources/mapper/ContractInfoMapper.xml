@@ -82,8 +82,6 @@
             <if test="tbContractInfo.id != null">AND ID = #{tbContractInfo.id}</if>
             <if test="tbContractInfo.remark != null">AND REMARK = #{tbContractInfo.remark}</if>
         </if>
-        <if test="keyword != null">
-        </if>
     </sql>
 
     <!-- ======================================= custom method ======================================= -->

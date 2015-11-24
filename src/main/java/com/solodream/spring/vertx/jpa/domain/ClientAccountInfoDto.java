@@ -34,6 +34,16 @@ public class ClientAccountInfoDto extends BaseBean {
 
     private String password;
 
+    private String keyword;
+
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
     public String getAccount() {
         return account;
     }

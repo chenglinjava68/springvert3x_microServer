@@ -18,12 +18,14 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
         router.route().handler(BodyHandler.create());
+
+
         router.route("/login").handler(
                 req -> {
                     LOGGER.info("Received a http request");
                     String name = req.request().getParam("username");
                     String password = req.request().getParam("password");
-                    vertx.eventBus().send("customer", name, ar -> {
+                    vertx.eventBus().send("login", name, ar -> {
                         if (ar.succeeded()) {
                             LOGGER.info("Received reply: " + ar.result().body());
                             req.response().end((String) ar.result().body());
@@ -31,6 +33,19 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
+
+        router.route("/sms").handler(
+                req -> {
+                    LOGGER.info("Received a http request");
+                    String name = req.request().getParam("username");
+                    String password = req.request().getParam("password");
+                    vertx.eventBus().send("sms", name, ar -> {
+                        if (ar.succeeded()) {
+                            LOGGER.info("Received reply: " + ar.result().body());
+                            req.response().end((String) ar.result().body());
+                        }
+                    });
+                });
         vertx.createHttpServer().requestHandler(router::accept).listen(18080);
         LOGGER.info("Started HttpServer(port=18080).");
     }

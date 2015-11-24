@@ -25,13 +25,20 @@ public class LoginVerticle extends AbstractVerticle {
     public void start() {
         LOGGER.info("start.");
 
-        vertx.eventBus().consumer("customer", message -> {
+        vertx.eventBus().consumer("login", message -> {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
                 String account = (String) message.body();
                 ClientAccountInfoDto result = new ClientAccountInfoDto();
                 result.setAccount(account);
-                String json = JSON.toJSONString(result);
+
+                boolean isExit = clientService.login(account);
+
+                String json = json = "failure";
+                if (isExit) {
+                    json = JSON.toJSONString(result);
+                }
+
                 message.reply(json);
             } catch (Exception e) {
                 LOGGER.error("convert error.", e);
