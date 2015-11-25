@@ -60,6 +60,9 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
+        
+        
+        
 
         router.route("/version").handler(
                 req -> {
