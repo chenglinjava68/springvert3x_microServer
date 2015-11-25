@@ -11,9 +11,11 @@ import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+
 @Component
 public class HttpServerVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);
+
     public void start() {
         LOGGER.info("start.");
         Router router = Router.router(vertx);
@@ -43,7 +45,9 @@ public class HttpServerVerticle extends AbstractVerticle {
                     RequestThreadLocal reqThreadLocal = ReqHandle.bindRequest(req.session());
 
                     if (reqThreadLocal.getUser() != null) {
-                        LOGGER.debug("user can access into our website");
+                        LOGGER.info("U can access into our website");
+                    } else {
+                        LOGGER.info("sorry,U have no permission to visit our website");
                     }
                     LOGGER.info("Received a http request");
                     String name = req.request().getParam("username");
