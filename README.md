@@ -1,6 +1,6 @@
 # 基于Vert3.x的micro server的微服务平台
 
-The Vert.x SpringBoot Example shows how you can embed Vert.x in a SpringBoot application.
+Micro server support asyn framework to handle complex bussiness.
 
 - [Spring Boot](http://projects.spring.io/spring-boot/),
 - [Vertx 3.0](http://vertx.io/)
@@ -13,9 +13,10 @@ The Vert.x SpringBoot Example shows how you can embed Vert.x in a SpringBoot app
      $ mvn clean install -Dmaven.test.skip=true -X
     
 ## Test
-
-    
      $ mvn spring-boot:run -X
+
+## Debug
+     $ debug Application.java
      
 
     
