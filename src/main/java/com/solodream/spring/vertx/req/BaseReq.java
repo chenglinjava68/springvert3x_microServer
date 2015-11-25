@@ -1,11 +1,13 @@
 package com.solodream.spring.vertx.req;
 
 /**
- * BaseReq req»ùÀà
+ * BaseReq reqï¿½ï¿½ï¿½ï¿½
  * 
  * @author dz
  * 
  */
 public class BaseReq {
+
+    private String token;
 
 }

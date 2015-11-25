@@ -1,12 +1,6 @@
 package com.solodream.spring.vertx.req;
 
-/**
- * JsonReq http接口请求的参数格式　
- * 
- * @author dz
- * 
- * @param <T>
- */
+
 public class JsonReq<T extends BaseReq> {
 
     private String id;
