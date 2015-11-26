@@ -5,9 +5,9 @@
 # APPLICATION SETTINGS
 jdbc:
   driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://localhost:3306/autobot_singapore?useUnicode=true&amp;charaterEncoding=utf-8
-  username: root
-  password: newpassword
+  url: jdbc:mysql://115.28.160.185:3306/autobot_singapore?useUnicode=true&amp;charaterEncoding=utf-8
+  username: autobot
+  password: mysql@autobot#2015
   maxActive: 3
   maxIdle: 30
   minIdle: 5
@@ -22,4 +22,4 @@ spring:
     main.show-banner: true
     main.web-environment: false
 logging:
-    config: ${env}/log4j2.xml
+    config: /log4j2.xml

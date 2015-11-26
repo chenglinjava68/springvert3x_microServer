@@ -27,6 +27,10 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route("/login").handler(
                 req -> {
                     LOGGER.info("Received a http request");
+                    System.out.println("<<<<<<<<<<<>>>>>>>>>>>>>");
+                    System.out.println(req.session().id());
+                    LOGGER.info(req.session().id());
+                    System.out.println("<<<<<<<<<<<>>>>>>>>>>>>>");
                     String name = req.request().getParam("username");
                     String password = req.request().getParam("password");
                     vertx.eventBus().send("login", name, ar -> {
