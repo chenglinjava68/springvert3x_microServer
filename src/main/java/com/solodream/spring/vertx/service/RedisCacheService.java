@@ -2,6 +2,7 @@ package com.solodream.spring.vertx.service;
 
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisOperations;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -19,13 +20,18 @@ public class RedisCacheService {
     private ListOperations<String, String> messageList;
     @Resource(name = "redisTemplate")
     private RedisOperations<String, String> latestMessageExpiration;
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, String> kvstore;
+
+
+    public void put(String key, String value) {
+        kvstore.set(key, value);
+    }
 
     public void addMessage(String user, String message) {
-
-
         messageList.leftPush(user, message);
         ZonedDateTime zonedDateTime = ZonedDateTime.now();
-        Date date = Date.from(zonedDateTime.plus(1, ChronoUnit.MINUTES).toInstant());
+        Date date = Date.from(zonedDateTime.plus(3, ChronoUnit.MINUTES).toInstant());
         latestMessageExpiration.expireAt(user, date);
     }
 
