@@ -1,7 +1,11 @@
 package com.solodream.spring.vertx.vertx;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
+import com.solodream.spring.vertx.req.JsonReq;
+import com.solodream.spring.vertx.req.client.DeviceRequestParam;
+import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
 import com.solodream.spring.vertx.service.ClientService;
 import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.AbstractVerticle;
@@ -34,8 +38,10 @@ public class LoginVerticle extends AbstractVerticle {
         vertx.eventBus().consumer("login", message -> {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
-
-
+                String jsonString = (String) message.body();
+                JsonReq<UserLoginRequestParam> obj = JSON.parseObject(jsonString, new TypeReference<JsonReq<UserLoginRequestParam>>() {
+                });
+                LOGGER.info("username is {},password is {}", obj.getParam().getUsername(), obj.getParam().getPassword());
                 String account = (String) message.body();
                 ClientAccountInfoDto result = new ClientAccountInfoDto();
                 result.setAccount(account);

@@ -1,7 +1,10 @@
 package com.solodream.spring.vertx.vertx;
 
+import com.alibaba.fastjson.JSON;
+import com.solodream.spring.vertx.req.JsonReq;
 import com.solodream.spring.vertx.req.ReqHandle;
 import com.solodream.spring.vertx.req.RequestThreadLocal;
+import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
@@ -26,14 +29,18 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         router.route("/login").handler(
                 req -> {
+                    JsonReq<UserLoginRequestParam> reqparam = new JsonReq<UserLoginRequestParam>();
+                    reqparam.setToken("TOKEN12312");
+                    UserLoginRequestParam param = new UserLoginRequestParam();
+                    param.setUsername("chenyang");
+                    param.setPassword("password");
+                    reqparam.setParam(param);
+                    String jsonString = JSON.toJSONString(reqparam);
                     LOGGER.info("Received a http request");
-                    System.out.println("<<<<<<<<<<<>>>>>>>>>>>>>");
-                    System.out.println(req.session().id());
+                    LOGGER.info("<<<<<<<<<<<>>>>>>>>>>>>>");
                     LOGGER.info(req.session().id());
-                    System.out.println("<<<<<<<<<<<>>>>>>>>>>>>>");
-                    String name = req.request().getParam("username");
-                    String password = req.request().getParam("password");
-                    vertx.eventBus().send("login", name, ar -> {
+                    LOGGER.info("<<<<<<<<<<<>>>>>>>>>>>>>");
+                    vertx.eventBus().send("login", jsonString, ar -> {
                         if (ar.succeeded()) {
                             ReqHandle.setOperator(req.session(), (String) ar.result().body());
                             LOGGER.info("Received reply: " + ar.result().body());
@@ -64,9 +71,6 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
-        
-        
-        
 
         router.route("/version").handler(
                 req -> {
