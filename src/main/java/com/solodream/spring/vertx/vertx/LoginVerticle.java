@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 /**
  * LoginVerticle
  *
@@ -33,13 +35,16 @@ public class LoginVerticle extends AbstractVerticle {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
 
-                redisCacheService.addMessage("cyp", "223");
+
                 String account = (String) message.body();
                 ClientAccountInfoDto result = new ClientAccountInfoDto();
                 result.setAccount(account);
-
                 boolean isExit = clientService.login(account);
-
+                redisCacheService.addMessage(account, account);
+                List<String> list = redisCacheService.listMessages(account);
+                for (String str : list) {
+                    LOGGER.info("value is " + str);
+                }
                 String json = json = "failure";
                 if (isExit) {
                     json = JSON.toJSONString(result);

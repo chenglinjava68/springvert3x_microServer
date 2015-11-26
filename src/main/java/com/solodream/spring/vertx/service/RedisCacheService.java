@@ -23,6 +23,7 @@ public class RedisCacheService {
 
     public void addMessage(String user, String message) {
 
+        
         messageList.leftPush(user, message);
         ZonedDateTime zonedDateTime = ZonedDateTime.now();
         Date date = Date.from(zonedDateTime.plus(1, ChronoUnit.MINUTES).toInstant());
