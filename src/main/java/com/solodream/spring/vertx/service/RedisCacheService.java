@@ -10,6 +10,7 @@ import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by young on 15/11/26.
@@ -26,6 +27,11 @@ public class RedisCacheService {
 
     public void put(String key, String value) {
         kvstore.set(key, value);
+    }
+
+
+    public Set<String> keys(String pattern) {
+        return latestMessageExpiration.keys(pattern);
     }
 
     public void addMessage(String user, String message) {
