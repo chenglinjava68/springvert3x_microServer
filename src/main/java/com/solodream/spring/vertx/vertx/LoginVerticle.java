@@ -33,8 +33,6 @@ public class LoginVerticle extends AbstractVerticle {
     private RedisCacheService redisCacheService;
 
     public void start() {
-        LOGGER.info("start.");
-
         vertx.eventBus().consumer("login", message -> {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
