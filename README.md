@@ -2,7 +2,7 @@
 
 Base in Vertx3x & Spring-boot framework , Micro-server platform support asyn framework to handle complex business.
 
-- [Spring Boot](http://projects.spring.io/spring-boot/),
+- [Spring Boot](http://projects.spring.io/spring-boot/)
 - [Vertx 3.0](http://vertx.io/)
 
 ## Requirements
