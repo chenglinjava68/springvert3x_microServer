@@ -4,7 +4,11 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.TypeReference;
 import com.solodream.spring.vertx.req.client.DeviceRequestParam;
+import com.solodream.spring.vertx.req.client.GPSSyncData;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by young on 15/11/25.
@@ -49,10 +53,22 @@ public class JSONParse {
                 "  ]]";
 
         JSONArray jsonArr = JSON.parseArray(gps);
+        List<GPSSyncData> list = new ArrayList<GPSSyncData>(jsonArr.size());
         for (Object array : jsonArr) {
             JSONArray gpsArray = JSON.parseArray(String.valueOf(array));
-            System.out.println(gpsArray.get(0));
+            GPSSyncData data = new GPSSyncData();
+            data.setSerialNumber(String.valueOf(gpsArray.get(0)));
+            data.setYearMonthDate(String.valueOf(gpsArray.get(1)));
+            data.setHourMinuteSecond(String.valueOf(gpsArray.get(2)));
+            data.setLongitude(Long.valueOf(String.valueOf(gpsArray.get(3))));
+            data.setEastOrwest(Integer.parseInt(String.valueOf(gpsArray.get(4))));
+            list.add(data);
+
         }
         System.out.println(obj.getParam().getImei());
+        for (GPSSyncData data : list) {
+            System.out.println(data.getSerialNumber());
+            System.out.println(data.getEastOrwest());
+        }
     }
 }
