@@ -6,6 +6,10 @@ import com.alibaba.fastjson.TypeReference;
 import com.solodream.spring.vertx.req.client.DeviceRequestParam;
 import com.solodream.spring.vertx.req.client.GPSSyncData;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
+import org.springframework.data.redis.connection.jredis.JredisPool;
+import redis.clients.jedis.JedisPool;
+import redis.clients.jedis.JedisPoolConfig;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +67,21 @@ public class JSONParse {
             data.setLongitude(Long.valueOf(String.valueOf(gpsArray.get(3))));
             data.setEastOrwest(Integer.parseInt(String.valueOf(gpsArray.get(4))));
             list.add(data);
-
         }
         System.out.println(obj.getParam().getImei());
         for (GPSSyncData data : list) {
-            System.out.println(data.getSerialNumber());
-            System.out.println(data.getEastOrwest());
+            getPool().getResource().set(data.getSerialNumber() + data.getYearMonthDate() + data.getHourMinuteSecond(), data.getLongitude() + "," + data.getLatitude());
         }
+
+
+//        JRedis   jredis = new JRedisClient("192.168.0.105",6379);
+    }
+
+    public static JedisPool getPool() {
+        JedisPool pool = null;
+        JedisPoolConfig config = new JedisPoolConfig();
+        config.setTestOnBorrow(true);
+        pool = new JedisPool(config, "localhost", 6379);
+        return pool;
     }
 }
