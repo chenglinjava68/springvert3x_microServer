@@ -70,7 +70,7 @@ public class JSONParse {
         }
         System.out.println(obj.getParam().getImei());
         for (GPSSyncData data : list) {
-            getPool().getResource().set(data.getSerialNumber() + data.getYearMonthDate() + data.getHourMinuteSecond(), data.getLongitude() + "," + data.getLatitude());
+            getPool().getResource().set(data.getSerialNumber() + ":" + data.getYearMonthDate() + ":" + data.getHourMinuteSecond(), data.getLongitude() + "," + data.getLatitude());
         }
 
 
