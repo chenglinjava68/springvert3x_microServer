@@ -5,8 +5,6 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.TypeReference;
 import com.solodream.spring.vertx.req.client.DeviceRequestParam;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by young on 15/11/25.
@@ -25,7 +23,6 @@ public class JSONParse {
 
         JsonReq<DeviceRequestParam> obj = JSON.parseObject(jsonString, new TypeReference<JsonReq<DeviceRequestParam>>() {
         });
-
 
         String gps = "[\n" +
                 "  [\n" +
