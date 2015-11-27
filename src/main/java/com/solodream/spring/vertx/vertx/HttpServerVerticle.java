@@ -6,25 +6,36 @@ import com.solodream.spring.vertx.req.ReqHandle;
 import com.solodream.spring.vertx.req.RequestThreadLocal;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
+import io.vertx.ext.web.handler.RedirectAuthHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+
 @Component
 public class HttpServerVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);
 
     public void start() {
-        LOGGER.info("start.");
         Router router = Router.router(vertx);
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
         router.route().handler(BodyHandler.create());
+
+        router.route("/*").handler(req -> {
+            LOGGER.info("Any requests to URI starting '/' require login");
+            // No auth required
+            req.next();
+        });
 
 
         router.route("/login").handler(

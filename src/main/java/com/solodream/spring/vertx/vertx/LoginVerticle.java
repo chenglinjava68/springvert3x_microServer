@@ -1,20 +1,21 @@
 package com.solodream.spring.vertx.vertx;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.TypeReference;
-import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
-import com.solodream.spring.vertx.req.JsonReq;
-import com.solodream.spring.vertx.req.client.DeviceRequestParam;
-import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
-import com.solodream.spring.vertx.service.ClientService;
-import com.solodream.spring.vertx.service.RedisCacheService;
-import io.vertx.core.AbstractVerticle;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
+import com.solodream.spring.vertx.req.JsonReq;
+import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
+import com.solodream.spring.vertx.service.ClientService;
+import com.solodream.spring.vertx.service.RedisCacheService;
+
+import io.vertx.core.AbstractVerticle;
 
 /**
  * LoginVerticle

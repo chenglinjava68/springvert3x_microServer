@@ -10,6 +10,7 @@ public class GPSSyncData {
     private String yearMonthDate;
     // 2 2 2
     private String hourMinuteSecond;
+
     //经度，取值范围为（0～180*3600*100），转换公式为：longitude= 实际度*3600*100+实际分*60*100+实际秒*100
     private long longitude;
     // 0 ～ 东经；1 ～ 西经
