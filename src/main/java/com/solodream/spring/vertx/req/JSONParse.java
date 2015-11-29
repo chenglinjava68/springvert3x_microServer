@@ -71,9 +71,6 @@ public class JSONParse {
             getPool().getResource().set(data.getSerialNumber() + ":" + data.getYearMonthDate() + ":" + data.getHourMinuteSecond(), data.getLongitude() + "," + data.getLatitude()
                     + "," + data.getEastOrwest() + "," + data.getDirection() + "," + data.getSpeed() + "," + data.getNorthOrsouth());
         }
-
-
-//        JRedis   jredis = new JRedisClient("192.168.0.105",6379);
     }
 
     public static JedisPool getPool() {
