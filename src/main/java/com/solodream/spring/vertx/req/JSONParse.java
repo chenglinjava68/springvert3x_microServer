@@ -6,10 +6,8 @@ import com.alibaba.fastjson.TypeReference;
 import com.solodream.spring.vertx.req.client.DeviceRequestParam;
 import com.solodream.spring.vertx.req.client.GPSSyncData;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
-import org.springframework.data.redis.connection.jredis.JredisPool;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +68,8 @@ public class JSONParse {
         }
         System.out.println(obj.getParam().getImei());
         for (GPSSyncData data : list) {
-            getPool().getResource().set(data.getSerialNumber() + ":" + data.getYearMonthDate() + ":" + data.getHourMinuteSecond(), data.getLongitude() + "," + data.getLatitude());
+            getPool().getResource().set(data.getSerialNumber() + ":" + data.getYearMonthDate() + ":" + data.getHourMinuteSecond(), data.getLongitude() + "," + data.getLatitude()
+                    + "," + data.getEastOrwest() + "," + data.getDirection() + "," + data.getSpeed() + "," + data.getNorthOrsouth());
         }
 
 
