@@ -29,6 +29,10 @@ public class RedisCacheService {
         kvstore.set(key, value);
     }
 
+    public String get(String key) {
+        return kvstore.get(key);
+    }
+
 
     public Set<String> keys(String pattern) {
         return latestMessageExpiration.keys(pattern);

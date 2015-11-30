@@ -41,7 +41,7 @@ public class LoginVerticle extends AbstractVerticle {
                 JsonReq<UserLoginRequestParam> obj = JSON.parseObject(jsonString, new TypeReference<JsonReq<UserLoginRequestParam>>() {
                 });
                 LOGGER.info("username is {},password is {}", obj.getParam().getUsername(), obj.getParam().getPassword());
-
+                LOGGER.info(">>>>>>>>>>>"+redisCacheService.get("admin")+"<<<<<<<<<<<");
                 redisCacheService.put(obj.getParam().getUsername(), obj.getParam().getPassword());
                 String account = (String) message.body();
                 ClientAccountInfoDto result = new ClientAccountInfoDto();

@@ -32,7 +32,9 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
 
         router.route("/*").handler(req -> {
-            LOGGER.info("Any requests to URI starting '/' require login");
+           LOGGER.info("Any requests to URI starting '/' require login");
+
+
             // No auth required
             req.next();
         });
