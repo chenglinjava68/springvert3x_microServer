@@ -39,8 +39,6 @@ public class ReqHandle {
     }
 
     public static void unbindRequest() {
-        //删除ThreadLocal的值，以防止关闭应用时出现memory leak
-        //http://wiki.apache.org/tomcat/MemoryLeakProtection#customThreadLocal
         RequestThreadLocal.getInstance().clear();
     }
 

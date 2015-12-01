@@ -1,25 +1,20 @@
 package com.solodream.spring.vertx.vertx;
 
 import com.alibaba.fastjson.JSON;
+import com.solodream.spring.vertx.auth.SoloAuthProvider;
 import com.solodream.spring.vertx.req.JsonReq;
 import com.solodream.spring.vertx.req.ReqHandle;
 import com.solodream.spring.vertx.req.RequestThreadLocal;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
 import io.vertx.core.AbstractVerticle;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.CookieHandler;
-import io.vertx.ext.web.handler.RedirectAuthHandler;
 import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Component
 public class HttpServerVerticle extends AbstractVerticle {
@@ -30,6 +25,7 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
         router.route().handler(BodyHandler.create());
+        //router.route().handler(SoloAuthProvider.create(vertx));
 
         router.route("/*").handler(req -> {
            LOGGER.info("Any requests to URI starting '/' require login");
@@ -61,9 +57,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         router.route("/sms").handler(
                 req -> {
-
                     RequestThreadLocal reqThreadLocal = ReqHandle.bindRequest(req.session());
-
                     if (reqThreadLocal.getUser() != null) {
                         LOGGER.info("U can access into our website");
                     } else {
