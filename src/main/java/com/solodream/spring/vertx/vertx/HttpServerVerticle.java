@@ -25,14 +25,15 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
         router.route().handler(BodyHandler.create());
-        //router.route().handler(SoloAuthProvider.create(vertx));
+        router.route("/*").handler(SoloAuthProvider.create(vertx));
 
-        router.route("/*").handler(req -> {
-           LOGGER.info("Any requests to URI starting '/' require login");
-            // No auth required
-            req.next();
-        });
+//        router.route("/*").handler(req -> {
+//           LOGGER.info("Any requests to URI starting '/' require login");
+//            // No auth required
+//            req.next();
+//        });
 
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>");
 
         router.route("/login").handler(
                 req -> {
