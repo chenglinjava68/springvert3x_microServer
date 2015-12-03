@@ -21,6 +21,8 @@ public class HttpServerVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);
 
     public void start() {
+
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>");
         Router router = Router.router(vertx);
         router.route().handler(CookieHandler.create());
         router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
@@ -33,7 +35,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 //            req.next();
 //        });
 
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>");
+
 
         router.route("/login").handler(
                 req -> {
