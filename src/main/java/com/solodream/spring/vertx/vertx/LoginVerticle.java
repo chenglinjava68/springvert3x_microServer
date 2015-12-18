@@ -38,6 +38,7 @@ public class LoginVerticle extends AbstractVerticle {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
                 String jsonString = (String) message.body();
+
                 JsonReq<UserLoginRequestParam> obj = JSON.parseObject(jsonString, new TypeReference<JsonReq<UserLoginRequestParam>>() {
                 });
                 LOGGER.info("username is {},password is {}", obj.getParam().getUsername(), obj.getParam().getPassword());
