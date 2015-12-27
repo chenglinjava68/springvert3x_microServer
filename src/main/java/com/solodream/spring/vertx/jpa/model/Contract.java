@@ -1,11 +1,12 @@
 package com.solodream.spring.vertx.jpa.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by young on 15/11/18.
  */
-public class Contract {
+public class Contract implements Serializable {
     private String name;
     private Integer id;
     private Date createDate;

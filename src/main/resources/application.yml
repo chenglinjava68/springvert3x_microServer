@@ -5,9 +5,9 @@
 # APPLICATION SETTINGS
 jdbc:
   driver: com.mysql.jdbc.Driver
-  url: jdbc:mysql://115.28.160.185:3306/autobot_singapore?useUnicode=true&amp;charaterEncoding=utf-8
-  username: autobot
-  password: mysql@autobot#2015
+  url: jdbc:mysql://localhost:3306/autobot_singapore?useUnicode=true&amp;charaterEncoding=utf-8
+  username: root
+  password: 123456
   maxActive: 3
   maxIdle: 30
   minIdle: 5

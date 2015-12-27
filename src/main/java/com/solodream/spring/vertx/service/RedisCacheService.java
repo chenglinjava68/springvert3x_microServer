@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -23,6 +24,16 @@ public class RedisCacheService {
     private RedisOperations<String, String> latestMessageExpiration;
     @Resource(name = "redisTemplate")
     private ValueOperations<String, String> kvstore;
+    @Resource(name = "redisTemplate")
+    private ValueOperations<String, Object> keyValueStore;
+
+    public void putObject(String key, Object value) {
+        keyValueStore.set(key, value);
+    }
+
+    public Object getObject(String key) {
+        return keyValueStore.get(key);
+    }
 
 
     public void put(String key, String value) {

@@ -2,6 +2,8 @@ package com.solodream.spring.vertx.vertx;
 
 import java.util.List;
 
+import com.solodream.spring.vertx.common.SerializeUtil;
+import com.solodream.spring.vertx.jpa.model.Contract;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,15 @@ public class LoginVerticle extends AbstractVerticle {
         vertx.eventBus().consumer("login", message -> {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
+
+                Contract contract=new Contract();
+                contract.setId(1);
+                contract.setName("Young");
+                redisCacheService.putObject("123", contract);
+
+
+                Contract result=(Contract)redisCacheService.getObject("123");
+                System.out.println(result.getName());
                 String jsonString = (String) message.body();
 
                 JsonReq<UserLoginRequestParam> obj = JSON.parseObject(jsonString, new TypeReference<JsonReq<UserLoginRequestParam>>() {
@@ -45,8 +56,8 @@ public class LoginVerticle extends AbstractVerticle {
                 LOGGER.info(">>>>>>>>>>>"+redisCacheService.get("admin")+"<<<<<<<<<<<");
                 redisCacheService.put(obj.getParam().getUsername(), obj.getParam().getPassword());
                 String account = (String) message.body();
-                ClientAccountInfoDto result = new ClientAccountInfoDto();
-                result.setAccount(account);
+                ClientAccountInfoDto resultval = new ClientAccountInfoDto();
+                resultval.setAccount(account);
                 boolean isExit = clientService.login(account);
                 redisCacheService.addMessage(account, account);
 
