@@ -81,7 +81,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                     reqparam.setParam(param);
                     String jsonString = JSON.toJSONString(reqparam);
                     LOGGER.info("Received a http request");
-                    LOGGER.info(req.session().id());
+                    //     LOGGER.info(req.session().id());
                     vertx.eventBus().send("login", jsonString, ar -> {
                         if (ar.succeeded()) {
                             ReqHandle.setOperator(req.session(), (String) ar.result().body());

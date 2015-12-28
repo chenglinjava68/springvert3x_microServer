@@ -6,12 +6,12 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by young on 15/11/26.
@@ -41,8 +41,8 @@ public class RedisCacheService {
     }
 
 
-    public void put(String key, String value,long expire) {
-        kvstore.set(key,value,expire);
+    public void put(String key, String value, long expire) {
+        kvstore.set(key, value, expire, TimeUnit.SECONDS);
     }
 
     public String get(String key) {

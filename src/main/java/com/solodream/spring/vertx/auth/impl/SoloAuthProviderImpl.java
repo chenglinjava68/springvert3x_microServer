@@ -34,8 +34,8 @@ public class SoloAuthProviderImpl implements UserSessionHandler {
     public void handle(RoutingContext routingContext) {
         LOGGER.info(">>>>>>>>>>>>>>>  Any request have to be intercept");
 
-        Contract result=(Contract)redisCacheService.getObject("123");
-        System.out.println(result.getName());
+//        Contract result=(Contract)redisCacheService.getObject("123");
+//        System.out.println(result.getName());
 
         Session session = routingContext.session();
         if (session != null) {
