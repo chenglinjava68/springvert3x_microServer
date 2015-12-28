@@ -44,8 +44,6 @@ public class LoginVerticle extends AbstractVerticle {
                 contract.setId(1);
                 contract.setName("Young");
                 redisCacheService.putObject("123", contract);
-
-
                 Contract result=(Contract)redisCacheService.getObject("123");
                 System.out.println(result.getName());
                 String jsonString = (String) message.body();
