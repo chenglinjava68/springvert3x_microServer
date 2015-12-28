@@ -40,6 +40,11 @@ public class RedisCacheService {
         kvstore.set(key, value);
     }
 
+
+    public void put(String key, String value,long expire) {
+        kvstore.set(key,value,expire);
+    }
+
     public String get(String key) {
         return kvstore.get(key);
     }

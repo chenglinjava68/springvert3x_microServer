@@ -12,11 +12,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.CookieHandler;
 import io.vertx.ext.web.handler.JWTAuthHandler;
-import io.vertx.ext.web.handler.SessionHandler;
-import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,10 +32,10 @@ public class HttpServerVerticle extends AbstractVerticle {
         Router router = Router.router(vertx);
 
 
-        router.route("/*").handler(SoloAuthProvider.create(vertx,redisCacheService));
+        router.route("/*").handler(SoloAuthProvider.create(vertx, redisCacheService));
 
         router.route("/*").handler(req -> {
-           LOGGER.info("Any requests to URI starting '/' require login");
+            LOGGER.info("Any requests to URI starting '/' require login");
             // No auth required
             req.next();
         });
@@ -57,7 +53,9 @@ public class HttpServerVerticle extends AbstractVerticle {
         // this route is excluded from the auth handler
         router.get("/api/newToken").handler(ctx -> {
             ctx.response().putHeader("Content-Type", "text/plain");
-            ctx.response().end(jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(60)));
+            String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(1 * 60));
+            ctx.response().end(generateToken);
+            redisCacheService.put("token", generateToken, 1 * 60);
         });
 
 
@@ -71,7 +69,6 @@ public class HttpServerVerticle extends AbstractVerticle {
 //            // No auth required
 //            req.next();
 //        });
-
 
 
         router.route("/login").handler(
