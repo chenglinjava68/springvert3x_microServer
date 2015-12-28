@@ -42,6 +42,13 @@ public class HttpServerVerticle extends AbstractVerticle {
             ctx.response().putHeader("Content-Type", "text/plain");
             ctx.response().end(jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(60)));
         });
+
+
+        router.post("/refresToken").handler(ctx -> {
+            ctx.response().putHeader("Content-Type", "text/plain");
+            ctx.response().end(jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(60)));
+        });
+
         router.route("/login").handler(
                 req -> {
                     JsonReq<UserLoginRequestParam> reqparam = new JsonReq<UserLoginRequestParam>();
