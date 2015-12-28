@@ -6,6 +6,7 @@ import com.solodream.spring.vertx.req.JsonReq;
 import com.solodream.spring.vertx.req.ReqHandle;
 import com.solodream.spring.vertx.req.RequestThreadLocal;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
+import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.jwt.JWTAuth;
@@ -18,15 +19,31 @@ import io.vertx.ext.web.handler.SessionHandler;
 import io.vertx.ext.web.sstore.LocalSessionStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class HttpServerVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(HttpServerVerticle.class);
 
+    @Autowired
+    private RedisCacheService redisCacheService;
+
+
     public void start() {
 
+        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>");
         Router router = Router.router(vertx);
+
+
+        router.route("/*").handler(SoloAuthProvider.create(vertx,redisCacheService));
+
+        router.route("/*").handler(req -> {
+           LOGGER.info("Any requests to URI starting '/' require login");
+            // No auth required
+            req.next();
+        });
+
         // Create a JWT Auth Provider
         JWTAuth jwt = JWTAuth.create(vertx, new JsonObject()
                 .put("keyStore", new JsonObject()
@@ -44,10 +61,18 @@ public class HttpServerVerticle extends AbstractVerticle {
         });
 
 
-        router.post("/refresToken").handler(ctx -> {
-            ctx.response().putHeader("Content-Type", "text/plain");
-            ctx.response().end(jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(60)));
-        });
+//        router.route().handler(CookieHandler.create());
+//        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+//        router.route().handler(BodyHandler.create());
+//        router.route("/*").handler(SoloAuthProvider.create(vertx));
+
+//        router.route("/*").handler(req -> {
+//           LOGGER.info("Any requests to URI starting '/' require login");
+//            // No auth required
+//            req.next();
+//        });
+
+
 
         router.route("/login").handler(
                 req -> {
