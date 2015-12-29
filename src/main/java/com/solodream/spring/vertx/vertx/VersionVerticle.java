@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.solodream.spring.vertx.jpa.domain.ClientVersionInfoDto;
 import com.solodream.spring.vertx.service.ClientService;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,9 @@ public class VersionVerticle extends AbstractVerticle {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
                 //semd message
-                String version = (String) message.body();
-                LOGGER.debug("VERSION > " + version);
-                ClientVersionInfoDto infoDto = clientService.getLastClientVersionInfoDto(Integer.valueOf(version));
+                JsonObject version = (JsonObject) message.body();
+                LOGGER.info("VERSION > " + version);
+                ClientVersionInfoDto infoDto = clientService.getLastClientVersionInfoDto(Integer.valueOf(1));
                 message.reply(JSON.toJSONString(infoDto));
             } catch (Exception e) {
                 LOGGER.error("convert error.", e);

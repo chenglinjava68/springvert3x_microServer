@@ -1,7 +1,6 @@
 package com.solodream.spring.vertx.vertx;
 
 import com.alibaba.fastjson.JSON;
-import com.solodream.spring.vertx.auth.SoloAuthProvider;
 import com.solodream.spring.vertx.req.JsonReq;
 import com.solodream.spring.vertx.req.ReqHandle;
 import com.solodream.spring.vertx.req.RequestThreadLocal;
@@ -12,6 +11,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
+import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.JWTAuthHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,15 +30,15 @@ public class HttpServerVerticle extends AbstractVerticle {
 
         System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>");
         Router router = Router.router(vertx);
+        router.route().handler(BodyHandler.create());
 
-
-        router.route("/*").handler(SoloAuthProvider.create(vertx, redisCacheService));
-
-        router.route("/*").handler(req -> {
-            LOGGER.info("Any requests to URI starting '/' require login");
-            // No auth required
-            req.next();
-        });
+//        router.route("/*").handler(SoloAuthProvider.create(vertx, redisCacheService));
+//
+//        router.route("/*").handler(req -> {
+//            LOGGER.info("Any requests to URI starting '/' require login");
+//            // No auth required
+//            req.next();
+//        });
 
         // Create a JWT Auth Provider
         JWTAuth jwt = JWTAuth.create(vertx, new JsonObject()
@@ -115,8 +115,10 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route("/version").handler(
                 req -> {
                     LOGGER.info("Received a http request");
-                    String version = req.request().getParam("version");
-                    vertx.eventBus().send("version", version, ar -> {
+                    JsonObject product = req.getBodyAsJson();
+                   // req.request().bodyHandler(body -> System.out.println("Got data " + body.toString("ISO-8859-1")));
+                    String version = "";
+                    vertx.eventBus().send("version", product, ar -> {
                         if (ar.succeeded()) {
                             LOGGER.info("Received reply: " + ar.result().body());
                             req.response().end((String) ar.result().body());
