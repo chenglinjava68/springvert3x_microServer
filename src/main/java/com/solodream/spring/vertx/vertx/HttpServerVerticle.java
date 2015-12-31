@@ -66,7 +66,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 //            req.next();
 //        });
 
-        router.route("/login").handler(
+        router.route("/client/login").handler(
                 req -> {
                     JsonReq<UserLoginRequestParam> reqparam = new JsonReq<UserLoginRequestParam>();
                     reqparam.setToken("TOKEN12312");
