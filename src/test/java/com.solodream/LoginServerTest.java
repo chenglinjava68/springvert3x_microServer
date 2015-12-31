@@ -25,8 +25,8 @@ public class LoginServerTest {
 
         UserLoginRequestParam param = new UserLoginRequestParam();
         param.setDeviceId("123456788");
-        param.setUsername("yuke");
-        param.setPassword("123456");
+        param.setUsername("TestAc2count24");
+        param.setPassword("123456steven");
         param.setSmsCode("12345");
 
         request.setParam(param);

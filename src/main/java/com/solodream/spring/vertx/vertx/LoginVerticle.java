@@ -2,6 +2,7 @@ package com.solodream.spring.vertx.vertx;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
+import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
 import com.solodream.spring.vertx.req.JsonReq;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
 import com.solodream.spring.vertx.service.ClientService;
@@ -32,10 +33,18 @@ public class LoginVerticle extends AbstractVerticle {
                 JsonObject jsonString = (JsonObject) message.body();
                 JsonReq<UserLoginRequestParam> obj = JSON.parseObject(jsonString.toString(), new TypeReference<JsonReq<UserLoginRequestParam>>() {
                 });
-                LOGGER.info("username is {},password is {}", obj.getParam().getUsername(), obj.getParam().getPassword());
-                clientService.login(obj.getParam().getUsername());
-                String json = "success";
-                message.reply(json);
+                String username = obj.getParam().getUsername();
+                String password = obj.getParam().getPassword();
+                LOGGER.info("username is {},password is {}", username, password);
+                ClientAccountInfoDto dto = clientService.login(username);
+                if (dto != null && dto.getPassword().equals(password)) {
+                    LOGGER.info("this {} login ", username);
+                    message.reply(JSON.toJSONString(dto));
+                } else {
+                    String json = "failure";
+                    message.fail(1001,"this username or password is wrong");
+
+                }
             } catch (Exception e) {
                 LOGGER.error("convert error.", e);
             }

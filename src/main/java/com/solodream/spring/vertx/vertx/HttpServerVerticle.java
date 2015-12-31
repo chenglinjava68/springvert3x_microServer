@@ -70,6 +70,9 @@ public class HttpServerVerticle extends AbstractVerticle {
                             //save ten min
                             String refreshToken = MD5Util.toMD5String(generateToken);
                             redisCacheService.put(refreshToken, generateToken, 10 * 60);
+                        } else {
+
+                            req.response().end("this username or password is wrong");
                         }
                     });
                 });

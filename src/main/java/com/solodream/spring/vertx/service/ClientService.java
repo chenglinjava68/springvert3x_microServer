@@ -21,15 +21,11 @@ public class ClientService {
     @Autowired
     private ClientVersionInfoMapper clientVersionInfoMapper;
 
-    public boolean login(String account) {
+    public ClientAccountInfoDto login(String account) {
         ClientAccountInfoDto dto = new ClientAccountInfoDto();
         dto.setAccount(account);
-        dto = clientAccountInfoMapper.query(dto);
-        boolean mark = false;
-        if (dto != null) {
-            mark = true;
-        }
-        return mark;
+        ClientAccountInfoDto result = clientAccountInfoMapper.query(dto);
+        return result;
     }
 
 
