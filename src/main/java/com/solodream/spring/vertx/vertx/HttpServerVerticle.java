@@ -1,9 +1,6 @@
 package com.solodream.spring.vertx.vertx;
 
-import com.alibaba.fastjson.JSON;
 import com.hazelcast.util.MD5Util;
-import com.solodream.spring.vertx.req.JsonReq;
-import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
 import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
@@ -26,18 +23,8 @@ public class HttpServerVerticle extends AbstractVerticle {
 
 
     public void start() {
-
-        System.out.println("<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>");
         Router router = Router.router(vertx);
         router.route().handler(BodyHandler.create());
-
-//        router.route("/*").handler(SoloAuthProvider.create(vertx, redisCacheService));
-//        router.route("/*").handler(req -> {
-//            LOGGER.info("Any requests to URI starting '/' require login");
-//            // No auth required
-//            req.next();
-//        });
-
         // Create a JWT Auth Provider
         JWTAuth jwt = JWTAuth.create(vertx, new JsonObject()
                 .put("keyStore", new JsonObject()
@@ -58,23 +45,17 @@ public class HttpServerVerticle extends AbstractVerticle {
 //        router.route().handler(CookieHandler.create());
 //        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 //        router.route().handler(BodyHandler.create());
-//        router.route("/*").handler(SoloAuthProvider.create(vertx));
-
+//        router.route("/*").handler(SoloAuthProvider.create(vertx,redisCacheService));
+//
 //        router.route("/*").handler(req -> {
 //           LOGGER.info("Any requests to URI starting '/' require login");
 //            // No auth required
 //            req.next();
 //        });
 
-        router.route("/client/login").handler(
+        router.route("/login").handler(
                 req -> {
-                    JsonReq<UserLoginRequestParam> reqparam = new JsonReq<UserLoginRequestParam>();
-                    reqparam.setToken("TOKEN12312");
-                    UserLoginRequestParam param = new UserLoginRequestParam();
-                    param.setUsername("chenyang");
-                    param.setPassword("password");
-                    reqparam.setParam(param);
-                    String jsonString = JSON.toJSONString(reqparam);
+                    JsonObject jsonString = req.getBodyAsJson();
                     LOGGER.info("Received a http request,enter into /client/login");
                     vertx.eventBus().send("login", jsonString, ar -> {
                         if (ar.succeeded()) {
@@ -89,7 +70,6 @@ public class HttpServerVerticle extends AbstractVerticle {
                             //save ten min
                             String refreshToken = MD5Util.toMD5String(generateToken);
                             redisCacheService.put(refreshToken, generateToken, 10 * 60);
-                            req.response().end((String) ar.result().body());
                         }
                     });
                 });

@@ -29,7 +29,7 @@ import java.io.IOException;
  */
 @Configuration
 @MapperScan(basePackages = "com.solodream.spring.vertx.mapper")
-@PropertySource("classpath:application.properties")
+@PropertySource(value = "classpath:application.properties", ignoreResourceNotFound = true)
 public class MybatisConfig {
 
     private static Logger log = LoggerFactory.getLogger(MybatisConfig.class);
