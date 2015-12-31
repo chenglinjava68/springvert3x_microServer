@@ -91,8 +91,9 @@ public class HttpServerVerticle extends AbstractVerticle {
                             req.response().putHeader("Content-Type", "text/plain");
                             String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setSubject(userName).setAlgorithm("HS256").setExpiresInSeconds(1 * 60));
                             req.response().end(generateToken);
+                            //save one min
                             redisCacheService.put("token", generateToken, 1 * 60);
-
+                            //save ten min
                             String refreshToken = MD5Util.toMD5String(generateToken);
                             redisCacheService.put(refreshToken, generateToken, 10 * 60);
                             req.response().end((String) ar.result().body());
