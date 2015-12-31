@@ -6,9 +6,11 @@ import com.hazelcast.util.MD5Util;
 import com.solodream.spring.vertx.common.DateUtil;
 import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
 import com.solodream.spring.vertx.req.JsonReq;
+import com.solodream.spring.vertx.req.client.SmsRequestParam;
 import com.solodream.spring.vertx.req.client.TokenRequestParam;
 import com.solodream.spring.vertx.resp.BaseResp;
 import com.solodream.spring.vertx.resp.login.LoginResponse;
+import com.solodream.spring.vertx.resp.login.SmsResponse;
 import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
@@ -92,6 +94,9 @@ public class HttpServerVerticle extends AbstractVerticle {
                             resp.setRefreshTokenExpire(refreshTokenExpire);
                             resp.setCompanyId(accountInfoDto.getCompanyId().toString());
                             resp.setCompanyName(accountInfoDto.getCompanyName());
+                            resp.setCustomerName(accountInfoDto.getCustomerName());
+                            resp.setCustomerId(accountInfoDto.getCustomerId().toString());
+//                            resp.setContractId(accountInfoDto.get);
                             response.setData(resp);
                             req.response().end(JSON.toJSONString(response));
 
@@ -115,15 +120,22 @@ public class HttpServerVerticle extends AbstractVerticle {
             ctx.response().end(token);
         });
 
-        router.route("/client/getSmsCode").handler(
+        router.route("/getSmsCode").handler(
                 req -> {
                     LOGGER.info("Received a http request,enter into /client/getSmsCode");
-                    String name = req.request().getParam("username");
-                    vertx.eventBus().send("sms", name, ar -> {
+                    JsonObject jsonString = req.getBodyAsJson();
+                    JsonReq<SmsRequestParam> obj = JSON.parseObject(jsonString.toString(), new TypeReference<JsonReq<SmsRequestParam>>() {
+                    });
+                    String mobile = obj.getParam().getMobile();
+                    BaseResp<SmsResponse> response = new BaseResp<SmsResponse>();
+                    SmsResponse resp = new SmsResponse();
+                    vertx.eventBus().send("sms", mobile, ar -> {
                         if (ar.succeeded()) {
+                            response.setData(resp);
                             LOGGER.info("Received reply: " + ar.result().body());
-                            req.response().end((String) ar.result().body());
+                            req.response().end(JSON.toJSONString(response));
                         }
+
                     });
                 });
 

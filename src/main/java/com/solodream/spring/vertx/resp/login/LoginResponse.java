@@ -12,6 +12,42 @@ public class LoginResponse extends BaseResp {
     private String refreshTokenExpire;
     private String companyId;
     private String companyName;
+    private String contractId;
+    private String contractName;
+    private String customerId;
+    private String customerName;
+
+    public String getContractId() {
+        return contractId;
+    }
+
+    public void setContractId(String contractId) {
+        this.contractId = contractId;
+    }
+
+    public String getContractName() {
+        return contractName;
+    }
+
+    public void setContractName(String contractName) {
+        this.contractName = contractName;
+    }
+
+    public String getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(String customerId) {
+        this.customerId = customerId;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
 
     public String getAccessToken() {
         return accessToken;

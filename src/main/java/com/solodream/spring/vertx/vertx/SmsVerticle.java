@@ -1,11 +1,14 @@
 package com.solodream.spring.vertx.vertx;
 
 import com.solodream.spring.vertx.service.ClientService;
+import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.AbstractVerticle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Random;
 
 /**
  * SmsVerticle
@@ -19,6 +22,9 @@ public class SmsVerticle extends AbstractVerticle {
 
     @Autowired
     private ClientService clientService;
+    @Autowired
+    private RedisCacheService redisCacheService;
+
 
     public void start() {
         LOGGER.info("start.");
@@ -27,12 +33,25 @@ public class SmsVerticle extends AbstractVerticle {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
                 //semd message
-
+                String mobile = (String) message.body();
+                String randomStr = getSix();
+                redisCacheService.put("SMS_CODE_" + mobile, randomStr, 5 * 60);
                 message.reply("success");
             } catch (Exception e) {
                 LOGGER.error("convert error.", e);
             }
         });
+    }
+
+    public static String getSix() {
+        Random rad = new Random();
+
+        String result = rad.nextInt(1000000) + "";
+
+        if (result.length() != 6) {
+            return getSix();
+        }
+        return result;
     }
 
 }
