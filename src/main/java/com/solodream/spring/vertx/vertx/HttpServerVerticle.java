@@ -1,6 +1,7 @@
 package com.solodream.spring.vertx.vertx;
 
 import com.alibaba.fastjson.JSON;
+import com.hazelcast.util.MD5Util;
 import com.solodream.spring.vertx.req.JsonReq;
 import com.solodream.spring.vertx.req.ReqHandle;
 import com.solodream.spring.vertx.req.RequestThreadLocal;
@@ -84,8 +85,15 @@ public class HttpServerVerticle extends AbstractVerticle {
                     //     LOGGER.info(req.session().id());
                     vertx.eventBus().send("login", jsonString, ar -> {
                         if (ar.succeeded()) {
-                            ReqHandle.setOperator(req.session(), (String) ar.result().body());
+//                            ReqHandle.setOperator(req.session(), (String) ar.result().body());
                             LOGGER.info("Received reply: " + ar.result().body());
+                            req.response().putHeader("Content-Type", "text/plain");
+                            String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(1 * 60));
+                            req.response().end(generateToken);
+                            redisCacheService.put("token", generateToken, 1 * 60);
+
+                            String refreshToken = MD5Util.toMD5String(generateToken);
+                            redisCacheService.put(refreshToken, generateToken, 10 * 60);
                             req.response().end((String) ar.result().body());
                         }
                     });
@@ -116,7 +124,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                 req -> {
                     LOGGER.info("Received a http request");
                     JsonObject product = req.getBodyAsJson();
-                   // req.request().bodyHandler(body -> System.out.println("Got data " + body.toString("ISO-8859-1")));
+                    // req.request().bodyHandler(body -> System.out.println("Got data " + body.toString("ISO-8859-1")));
                     String version = "";
                     vertx.eventBus().send("version", product, ar -> {
                         if (ar.succeeded()) {
