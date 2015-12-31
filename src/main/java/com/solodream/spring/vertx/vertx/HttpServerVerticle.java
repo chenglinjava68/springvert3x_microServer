@@ -75,7 +75,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                     param.setPassword("password");
                     reqparam.setParam(param);
                     String jsonString = JSON.toJSONString(reqparam);
-                    LOGGER.info("Received a http request");
+                    LOGGER.info("Received a http request,enter into /client/login");
                     vertx.eventBus().send("login", jsonString, ar -> {
                         if (ar.succeeded()) {
                             String userName = (String) ar.result().body();
@@ -131,6 +131,19 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
+        router.route("/client/logout").handler(
+                req -> {
+                    LOGGER.info("Received a http request to /client/logout");
+                    JsonObject device = req.getBodyAsJson();
+                    vertx.eventBus().send("device", device, ar -> {
+                        if (ar.succeeded()) {
+                            LOGGER.info("Received reply: " + ar.result().body());
+                            req.response().end((String) ar.result().body());
+                        }
+                    });
+                });
+
+
         router.route("/client/getDeviceId").handler(
                 req -> {
                     LOGGER.info("Received a http request to /client/getDeviceId");
@@ -142,6 +155,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                         }
                     });
                 });
+
 
         router.route("/token").handler(
                 req -> {
