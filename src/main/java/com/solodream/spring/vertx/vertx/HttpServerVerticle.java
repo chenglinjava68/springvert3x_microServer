@@ -85,10 +85,11 @@ public class HttpServerVerticle extends AbstractVerticle {
                     //     LOGGER.info(req.session().id());
                     vertx.eventBus().send("login", jsonString, ar -> {
                         if (ar.succeeded()) {
+                            String userName = (String) ar.result().body();
 //                            ReqHandle.setOperator(req.session(), (String) ar.result().body());
                             LOGGER.info("Received reply: " + ar.result().body());
                             req.response().putHeader("Content-Type", "text/plain");
-                            String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(1 * 60));
+                            String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setSubject(userName).setAlgorithm("HS256").setExpiresInSeconds(1 * 60));
                             req.response().end(generateToken);
                             redisCacheService.put("token", generateToken, 1 * 60);
 
