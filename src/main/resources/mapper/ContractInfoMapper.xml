@@ -19,12 +19,14 @@
         <result column="GMT_MODIFIED" property="gmtModified"/>
         <result column="ID" property="id"/>
         <result column="REMARK" property="remark"/>
+        <result column="COMPANY_ID" property="companyId"/>
+        <result column="COMPANY_NAME" property="companyName"/>
     </resultMap>
     <sql id="tableName">
         tb_contract_info
     </sql>
     <sql id="allColumns">
-     ID,NO,ORG_ID,ORG_NAME,START_DATE,END_DATE,REMARK,IS_DELETED,GMT_CREATED,GMT_MODIFIED,EXTEND,CUSTOMER_ID,CUSTOMER_NAME,ACCOUNT,PASSWORD</sql>
+    COMPANY_ID,COMPANY_NAME, ID,NO,ORG_ID,ORG_NAME,START_DATE,END_DATE,REMARK,IS_DELETED,GMT_CREATED,GMT_MODIFIED,EXTEND,CUSTOMER_ID,CUSTOMER_NAME,ACCOUNT,PASSWORD</sql>
 
 
     <select id="get" resultMap="TbContractInfoInfoMap">

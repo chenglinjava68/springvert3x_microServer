@@ -41,9 +41,7 @@ public class LoginVerticle extends AbstractVerticle {
                     LOGGER.info("this {} login ", username);
                     message.reply(JSON.toJSONString(dto));
                 } else {
-                    String json = "failure";
-                    message.fail(1001,"this username or password is wrong");
-
+                    message.fail(1201, "this username or password is wrong");
                 }
             } catch (Exception e) {
                 LOGGER.error("convert error.", e);

@@ -1,6 +1,14 @@
 package com.solodream.spring.vertx.vertx;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
 import com.hazelcast.util.MD5Util;
+import com.solodream.spring.vertx.common.DateUtil;
+import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
+import com.solodream.spring.vertx.req.JsonReq;
+import com.solodream.spring.vertx.req.client.TokenRequestParam;
+import com.solodream.spring.vertx.resp.BaseResp;
+import com.solodream.spring.vertx.resp.login.LoginResponse;
 import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
@@ -13,6 +21,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.Date;
 
 @Component
 public class HttpServerVerticle extends AbstractVerticle {
@@ -57,35 +67,51 @@ public class HttpServerVerticle extends AbstractVerticle {
                 req -> {
                     JsonObject jsonString = req.getBodyAsJson();
                     LOGGER.info("Received a http request,enter into /client/login");
+                    BaseResp<LoginResponse> response = new BaseResp<LoginResponse>();
+                    LoginResponse resp = new LoginResponse();
                     vertx.eventBus().send("login", jsonString, ar -> {
                         if (ar.succeeded()) {
-                            String userName = (String) ar.result().body();
+                            String dto = (String) ar.result().body();
 //                            ReqHandle.setOperator(req.session(), (String) ar.result().body());
                             LOGGER.info("Received reply: " + ar.result().body());
+                            ClientAccountInfoDto accountInfoDto = JSON.parseObject(dto, new TypeReference<ClientAccountInfoDto>() {
+                            });
+                            Date date = new Date();
+                            String accessTokenExpire = DateUtil.formatDateTime(DateUtil.addDateMinu(date, 10080));
+                            String refreshTokenExpire = DateUtil.formatDateTime(DateUtil.addDateMinu(date, 20160));
                             req.response().putHeader("Content-Type", "text/plain");
-                            String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setSubject(userName).setAlgorithm("HS256").setExpiresInSeconds(1 * 60));
-                            req.response().end(generateToken);
-                            //save one min
-                            redisCacheService.put("token", generateToken, 1 * 60);
-                            //save ten min
+                            String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setSubject(accountInfoDto.getAccount()).setAlgorithm("HS256").setExpiresInSeconds(10080 * 60));
+                            //save one week
+                            redisCacheService.put("token", generateToken, 10080 * 60);
+                            //save two week
                             String refreshToken = MD5Util.toMD5String(generateToken);
-                            redisCacheService.put(refreshToken, generateToken, 10 * 60);
-                        } else {
+                            redisCacheService.put(refreshToken, generateToken, 20160 * 60);
+                            resp.setAccessToken(generateToken);
+                            resp.setRefreshToken(refreshToken);
+                            resp.setAccessTokenExpire(accessTokenExpire);
+                            resp.setRefreshTokenExpire(refreshTokenExpire);
+                            resp.setCompanyId(accountInfoDto.getCompanyId().toString());
+                            resp.setCompanyName(accountInfoDto.getCompanyName());
+                            response.setData(resp);
+                            req.response().end(JSON.toJSONString(response));
 
-                            req.response().end("this username or password is wrong");
+                        } else {
+                            resp.setCode(1201);
+                            resp.setMsg("this username or password is wrong");
+                            req.response().end(JSON.toJSONString(response));
                         }
                     });
                 });
 
-        router.get("/client/getAccessToken").handler(ctx -> {
+        router.post("/getAccessToken").handler(ctx -> {
             LOGGER.info("Received a http request,enter into /client/getAccessToken");
-            String refreshToken = ctx.request().getParam("refreshToken");
+            JsonObject jsonString = ctx.getBodyAsJson();
+            JsonReq<TokenRequestParam> obj = JSON.parseObject(jsonString.toString(), new TypeReference<JsonReq<TokenRequestParam>>() {
+            });
+            String refreshToken = obj.getParam().getRefreshToken();
             ctx.response().putHeader("Content-Type", "text/plain");
             String token = redisCacheService.get(refreshToken);
-            if (token != null) {
-                redisCacheService.put("token", token, 1 * 60);
-                redisCacheService.put(refreshToken, refreshToken, 10 * 60);
-            }
+
             ctx.response().end(token);
         });
 
