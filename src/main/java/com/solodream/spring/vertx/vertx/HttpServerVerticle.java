@@ -3,8 +3,6 @@ package com.solodream.spring.vertx.vertx;
 import com.alibaba.fastjson.JSON;
 import com.hazelcast.util.MD5Util;
 import com.solodream.spring.vertx.req.JsonReq;
-import com.solodream.spring.vertx.req.ReqHandle;
-import com.solodream.spring.vertx.req.RequestThreadLocal;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
 import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.AbstractVerticle;
@@ -34,7 +32,6 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
 
 //        router.route("/*").handler(SoloAuthProvider.create(vertx, redisCacheService));
-//
 //        router.route("/*").handler(req -> {
 //            LOGGER.info("Any requests to URI starting '/' require login");
 //            // No auth required
@@ -58,8 +55,6 @@ public class HttpServerVerticle extends AbstractVerticle {
             ctx.response().end(generateToken);
             redisCacheService.put("token", generateToken, 1 * 60);
         });
-
-
 //        router.route().handler(CookieHandler.create());
 //        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 //        router.route().handler(BodyHandler.create());
@@ -71,7 +66,6 @@ public class HttpServerVerticle extends AbstractVerticle {
 //            req.next();
 //        });
 
-
         router.route("/login").handler(
                 req -> {
                     JsonReq<UserLoginRequestParam> reqparam = new JsonReq<UserLoginRequestParam>();
@@ -82,7 +76,6 @@ public class HttpServerVerticle extends AbstractVerticle {
                     reqparam.setParam(param);
                     String jsonString = JSON.toJSONString(reqparam);
                     LOGGER.info("Received a http request");
-                    //     LOGGER.info(req.session().id());
                     vertx.eventBus().send("login", jsonString, ar -> {
                         if (ar.succeeded()) {
                             String userName = (String) ar.result().body();
@@ -101,7 +94,8 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
-        router.get("/refreshToken").handler(ctx -> {
+        router.get("/client/getAccessToken").handler(ctx -> {
+            LOGGER.info("Received a http request,enter into /client/getAccessToken");
             String refreshToken = ctx.request().getParam("refreshToken");
             ctx.response().putHeader("Content-Type", "text/plain");
             String token = redisCacheService.get(refreshToken);
@@ -112,17 +106,10 @@ public class HttpServerVerticle extends AbstractVerticle {
             ctx.response().end(token);
         });
 
-        router.route("/sms").handler(
+        router.route("/client/getSmsCode").handler(
                 req -> {
-                    RequestThreadLocal reqThreadLocal = ReqHandle.bindRequest(req.session());
-                    if (reqThreadLocal.getUser() != null) {
-                        LOGGER.info("U can access into our website");
-                    } else {
-                        LOGGER.info("sorry,U have no permission to visit our website");
-                    }
-                    LOGGER.info("Received a http request");
+                    LOGGER.info("Received a http request,enter into /client/getSmsCode");
                     String name = req.request().getParam("username");
-                    String password = req.request().getParam("password");
                     vertx.eventBus().send("sms", name, ar -> {
                         if (ar.succeeded()) {
                             LOGGER.info("Received reply: " + ar.result().body());
@@ -131,12 +118,10 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
-
-        router.route("/version").handler(
+        router.route("/client/getLastVersion").handler(
                 req -> {
-                    LOGGER.info("Received a http request");
+                    LOGGER.info("Received a http request to /client/getLastVersion");
                     JsonObject product = req.getBodyAsJson();
-                    // req.request().bodyHandler(body -> System.out.println("Got data " + body.toString("ISO-8859-1")));
                     String version = "";
                     vertx.eventBus().send("version", product, ar -> {
                         if (ar.succeeded()) {
@@ -146,6 +131,17 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
+        router.route("/client/getDeviceId").handler(
+                req -> {
+                    LOGGER.info("Received a http request to /client/getDeviceId");
+                    JsonObject device = req.getBodyAsJson();
+                    vertx.eventBus().send("device", device, ar -> {
+                        if (ar.succeeded()) {
+                            LOGGER.info("Received reply: " + ar.result().body());
+                            req.response().end((String) ar.result().body());
+                        }
+                    });
+                });
 
         router.route("/token").handler(
                 req -> {
