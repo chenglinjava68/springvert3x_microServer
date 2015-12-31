@@ -100,6 +100,16 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
+        router.get("/refreshToken").handler(ctx -> {
+            String refreshToken = ctx.request().getParam("refreshToken");
+            ctx.response().putHeader("Content-Type", "text/plain");
+            String token = redisCacheService.get(refreshToken);
+            if (token != null) {
+                redisCacheService.put("token", token, 1 * 60);
+                redisCacheService.put(refreshToken, refreshToken, 10 * 60);
+            }
+            ctx.response().end(token);
+        });
 
         router.route("/sms").handler(
                 req -> {
