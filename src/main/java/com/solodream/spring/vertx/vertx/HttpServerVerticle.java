@@ -47,6 +47,12 @@ public class HttpServerVerticle extends AbstractVerticle {
         // protect the API
         router.route("/api/*").handler(JWTAuthHandler.create(jwt, "/api/newToken"));
 
+//        router.route().handler(CookieHandler.create());
+//        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
+//        router.route().handler(BodyHandler.create());
+//        router.route("/*").handler(SoloAuthProvider.create(vertx,redisCacheService));
+//
+
         // this route is excluded from the auth handler
         router.get("/api/newToken").handler(ctx -> {
             ctx.response().putHeader("Content-Type", "text/plain");
@@ -54,18 +60,8 @@ public class HttpServerVerticle extends AbstractVerticle {
             ctx.response().end(generateToken);
             redisCacheService.put("token", generateToken, 1 * 60);
         });
-//        router.route().handler(CookieHandler.create());
-//        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
-//        router.route().handler(BodyHandler.create());
-//        router.route("/*").handler(SoloAuthProvider.create(vertx,redisCacheService));
-//
-//        router.route("/*").handler(req -> {
-//           LOGGER.info("Any requests to URI starting '/' require login");
-//            // No auth required
-//            req.next();
-//        });
 
-        router.route("/login").handler(
+        router.route("/client/login").handler(
                 req -> {
                     JsonObject jsonString = req.getBodyAsJson();
                     LOGGER.info("Received a http request,enter into /client/login");
@@ -109,7 +105,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
-        router.post("/getAccessToken").handler(ctx -> {
+        router.post("/client/getAccessToken").handler(ctx -> {
             LOGGER.info("Received a http request,enter into /client/getAccessToken");
             JsonObject jsonString = ctx.getBodyAsJson();
             JsonReq<TokenRequestParam> obj = JSON.parseObject(jsonString.toString(), new TypeReference<JsonReq<TokenRequestParam>>() {
@@ -121,7 +117,7 @@ public class HttpServerVerticle extends AbstractVerticle {
             ctx.response().end(token);
         });
 
-        router.route("/getSmsCode").handler(
+        router.route("/client/getSmsCode").handler(
                 req -> {
                     LOGGER.info("Received a http request,enter into /client/getSmsCode");
                     JsonObject jsonString = req.getBodyAsJson();
@@ -139,6 +135,11 @@ public class HttpServerVerticle extends AbstractVerticle {
 
                     });
                 });
+        router.route("/*").handler(req -> {
+            LOGGER.info("Any requests to URI starting '/' require login");
+            // No auth required
+            req.next();
+        });
 
         router.route("/client/getLastVersion").handler(
                 req -> {
