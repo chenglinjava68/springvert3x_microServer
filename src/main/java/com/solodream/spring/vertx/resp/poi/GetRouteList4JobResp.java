@@ -74,6 +74,26 @@ public class GetRouteList4JobResp extends BaseResp {
          */
         private String plateNo;
 
+        private String direction;
+
+        private String speed;
+
+        public String getDirection() {
+            return direction;
+        }
+
+        public void setDirection(String direction) {
+            this.direction = direction;
+        }
+
+        public String getSpeed() {
+            return speed;
+        }
+
+        public void setSpeed(String speed) {
+            this.speed = speed;
+        }
+
         public String getDepartureTime() {
             return departureTime;
         }
