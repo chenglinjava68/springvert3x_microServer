@@ -6,7 +6,6 @@ import com.solodream.spring.vertx.common.DistanceUtil;
 import com.solodream.spring.vertx.jpa.domain.PoiInfoDto;
 import com.solodream.spring.vertx.jpa.domain.ScheduleInfoDto;
 import com.solodream.spring.vertx.mapper.PoiInfoMapper;
-import com.solodream.spring.vertx.mapper.RouteInfoMapper;
 import com.solodream.spring.vertx.mapper.ScheduleInfoMapper;
 import com.solodream.spring.vertx.req.client.GetRouteDetailReq;
 import com.solodream.spring.vertx.resp.poi.GetRouteList4JobResp;
@@ -23,8 +22,6 @@ import java.util.List;
  */
 @Service
 public class SearchService {
-    @Autowired
-    private RouteInfoMapper routeInfoMapper;
     @Autowired
     private PoiInfoMapper poiInfoMapper;
     @Autowired
@@ -52,6 +49,7 @@ public class SearchService {
             int place = 0;
             boolean mark = false;
 
+            int index = 0;
             for (PoiInfoDto poi : pois) {
                 if (DistanceUtil.checkRange(startlng, startlat, poi.getLongitude(), poi.getLatitude(), 200)) {
                     ++place;
@@ -60,6 +58,7 @@ public class SearchService {
                 if (DistanceUtil.checkRange(endlng, endlat, poi.getLongitude(), poi.getLatitude(), 200)) {
                     --place;
                 }
+                index++;
 
                 poi.setStationStartTime(DateUtil.addDateMinu(job.getDepartureTime(), Integer.parseInt(poi.getIntervalTime())));
             }
@@ -72,34 +71,35 @@ public class SearchService {
                 String currentDate = DateUtil.formatDate4YYYYMMDD();
                 String currentPoi = redisCacheService.get("JOB_" + currentDate + "_" + job.getId());
                 if (StringUtils.isNotBlank(currentPoi)) {
-                    String[] infos = currentPoi.split(",");
+//该路线还未过站
+                    if (Integer.parseInt(currentPoi.split(">")[1]) < index) {
+                        String[] infos = currentPoi.split(",");
 
-                    String name = infos[0];
-                    String postCode = infos[1];
-                    String lng = infos[2];
-                    String lat = infos[3];
-                    String direction = infos[4];
-                    // String speed = "";
+                        String name = infos[0];
+                        String postCode = infos[1];
+                        String lng = infos[2];
+                        String lat = infos[3];
+                        String direction = infos[4];
+                        String speed = infos[5].split("=")[0];
 
-                    GetRouteList4JobResp.Route4JobInfo route4JobInfo = new GetRouteList4JobResp.Route4JobInfo();
-                    route4JobInfo.setDepartureTime(DateUtil.formatDateTime(job.getDepartureTime()));
-                    route4JobInfo.setDirection(direction);
-                    route4JobInfo.setLongitude(lng);
-                    route4JobInfo.setLatitude(lat);
-                    route4JobInfo.setDriverId(job.getDriverId());
-                    route4JobInfo.setDriverName(job.getDriverName());
-                    route4JobInfo.setDriverPhone(job.getDriverMobile());
-                    route4JobInfo.setPlateNo(job.getVehicleNo());
-                    route4JobInfo.setVehicleId(job.getVehicleId() + "");
-                    route4JobInfo.setRouteId(job.getRouteId());
-                    route4JobInfo.setRouteRemark(job.getRouteName());
-//                route4JobInfo.setSpeed();
-                    datalist.add(route4JobInfo);
-                } else {
-                    match = true;
+                        GetRouteList4JobResp.Route4JobInfo route4JobInfo = new GetRouteList4JobResp.Route4JobInfo();
+                        route4JobInfo.setDepartureTime(DateUtil.formatDateTime(job.getDepartureTime()));
+                        route4JobInfo.setDirection(direction);
+                        route4JobInfo.setLongitude(lng);
+                        route4JobInfo.setLatitude(lat);
+                        route4JobInfo.setDriverId(job.getDriverId());
+                        route4JobInfo.setDriverName(job.getDriverName());
+                        route4JobInfo.setDriverPhone(job.getDriverMobile());
+                        route4JobInfo.setPlateNo(job.getVehicleNo());
+                        route4JobInfo.setVehicleId(job.getVehicleId() + "");
+                        route4JobInfo.setRouteId(job.getRouteId());
+                        route4JobInfo.setRouteRemark(job.getRouteName());
+                        route4JobInfo.setSpeed(speed);
+                        datalist.add(route4JobInfo);
+                    }
                 }
 //A->B->C   A,B
-                if (match) {
+                else {
                     //  route
                     GetRouteList4JobResp.Route4JobInfo jobInfo = new GetRouteList4JobResp.Route4JobInfo();
                     jobInfo.setDriverId(job.getDriverId());
@@ -127,9 +127,8 @@ public class SearchService {
                     datalist.add(jobInfo);
                 }
             }
-
-
         }
+
         response.setDataList(datalist);
         response.setTotal(datalist.size());
         return response;
