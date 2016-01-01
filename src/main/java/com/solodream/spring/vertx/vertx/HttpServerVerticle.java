@@ -144,7 +144,6 @@ public class HttpServerVerticle extends AbstractVerticle {
                 req -> {
                     LOGGER.info("Received a http request to /client/getLastVersion");
                     JsonObject product = req.getBodyAsJson();
-                    String version = "";
                     vertx.eventBus().send("version", product, ar -> {
                         if (ar.succeeded()) {
                             LOGGER.info("Received reply: " + ar.result().body());
@@ -182,8 +181,8 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route("/shuttle/from").handler(
                 req -> {
                     LOGGER.info("Received a http request to /shuttle/from");
-                    String version = req.request().getParam("token");
-                    vertx.eventBus().send("version", version, ar -> {
+                    JsonObject from = req.getBodyAsJson();
+                    vertx.eventBus().send("from", from, ar -> {
                         if (ar.succeeded()) {
                             LOGGER.info("Received reply: " + ar.result().body());
                             req.response().end((String) ar.result().body());
@@ -194,8 +193,8 @@ public class HttpServerVerticle extends AbstractVerticle {
         router.route("/shuttle/to").handler(
                 req -> {
                     LOGGER.info("Received a http request to /shuttle/to");
-                    String version = req.request().getParam("token");
-                    vertx.eventBus().send("version", version, ar -> {
+                    JsonObject to = req.getBodyAsJson();
+                    vertx.eventBus().send("to", to, ar -> {
                         if (ar.succeeded()) {
                             LOGGER.info("Received reply: " + ar.result().body());
                             req.response().end((String) ar.result().body());

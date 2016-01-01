@@ -1,6 +1,5 @@
 package com.solodream.spring.vertx.vertx;
 
-import com.solodream.spring.vertx.service.RouteService;
 import com.solodream.spring.vertx.service.SearchService;
 import io.vertx.core.AbstractVerticle;
 import org.slf4j.Logger;
