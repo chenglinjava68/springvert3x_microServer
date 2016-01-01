@@ -17,8 +17,6 @@ import org.springframework.stereotype.Component;
 public class TokenVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsVerticle.class);
 
-    @Autowired
-    private ClientService clientService;
 
     public void start() {
         LOGGER.info("start.");

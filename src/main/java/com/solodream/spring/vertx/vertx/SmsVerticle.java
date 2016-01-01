@@ -21,8 +21,6 @@ public class SmsVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(SmsVerticle.class);
 
     @Autowired
-    private ClientService clientService;
-    @Autowired
     private RedisCacheService redisCacheService;
 
 
