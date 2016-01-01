@@ -89,4 +89,47 @@ public class RouteService {
         resp.setTotal(String.valueOf(routeSet.size()));
         return resp;
     }
+
+
+    public GetPoiListResp list(GetRouteDetailReq request) {
+        RouteContractInfoDto routeContractInfoDto = new RouteContractInfoDto();
+        if (request.getCustomerId() != null)
+            routeContractInfoDto.setCustomerId(Integer.parseInt(request.getCustomerId()));
+        if (request.getContractId() != null)
+            routeContractInfoDto.setContractId(Integer.parseInt(request.getContractId()));
+        List<RouteContractInfoDto> dtos = routeInfoMapper.querys(routeContractInfoDto, request.getKeyword());
+        List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
+        for (RouteContractInfoDto dto : dtos) {
+            List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
+
+            PoiInfoDto poi = pois.get(0);
+            GetPoiListResp.PoiInfo poiresp = new GetPoiListResp.PoiInfo();
+            poiresp.setLongitude(poi.getLongitude());
+            poiresp.setLatitude(poi.getLatitude());
+            poiresp.setPostCode(poi.getPostcode());
+            poiresp.setAddress(poi.getAddress());
+            poiresp.setRemark(poi.getDescription());
+            poiresp.setCompanyId(poi.getCompanyId());
+            poiresp.setCustomerId(poi.getCustomerId());
+            poiresp.setId(poi.getId());
+            routeSet.add(poiresp);
+
+            PoiInfoDto poilast = pois.get(pois.size() - 1);
+            GetPoiListResp.PoiInfo poiresplast = new GetPoiListResp.PoiInfo();
+            poiresplast.setLongitude(poilast.getLongitude());
+            poiresplast.setLatitude(poilast.getLatitude());
+            poiresplast.setPostCode(poilast.getPostcode());
+            poiresplast.setAddress(poilast.getAddress());
+            poiresplast.setRemark(poilast.getDescription());
+            poiresplast.setCompanyId(poilast.getCompanyId());
+            poiresplast.setCustomerId(poilast.getCustomerId());
+            poiresplast.setId(poilast.getId());
+            routeSet.add(poiresplast);
+        }
+
+        GetPoiListResp resp = new GetPoiListResp();
+        resp.setDataList(routeSet);
+        resp.setTotal(String.valueOf(routeSet.size()));
+        return resp;
+    }
 }
