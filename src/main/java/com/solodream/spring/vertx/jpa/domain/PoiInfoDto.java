@@ -43,12 +43,12 @@ public class PoiInfoDto extends BaseBean {
 	/**
 	 * 经度
 	 */
-	private String lng;
+	private String longitude;
 
 	/**
 	 * 纬度
 	 */
-	private String lat;
+	private String latitude;
 
 	/**
 	 * 半径（单位:米）
@@ -199,44 +199,26 @@ public class PoiInfoDto extends BaseBean {
 		this.postcode = postcode;
 	}
 
-	/**
-	 * 经度
-	 *
-	 * @return
-	 */
-	public String getLng() {
-		return this.lng;
+
+	public String getLongitude() {
+		return longitude;
 	}
 
-	/**
-	 * 经度
-	 *
-	 * @param lng
-	 */
-	public void setLng(String lng) {
-		this.lng = lng;
+	public void setLongitude(String longitude) {
+		this.longitude = longitude;
 	}
 
-	/**
-	 * 纬度
-	 *
-	 * @return
-	 */
-	public String getLat() {
-		return this.lat;
+	public String getLatitude() {
+		return latitude;
 	}
 
-	/**
-	 * 纬度
-	 *
-	 * @param lat
-	 */
-	public void setLat(String lat) {
-		this.lat = lat;
+	public void setLatitude(String latitude) {
+		this.latitude = latitude;
 	}
 
 	/**
 	 * 半径（单位:米）
+
 	 *
 	 * @return
 	 */
