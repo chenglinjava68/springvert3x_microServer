@@ -36,7 +36,7 @@ public class LoginServerTest {
 
         System.out.println(parameter);
 
-        System.out.println(HttpUtils.post("http://127.0.0.1:18080/login", headers, parameter));
+        System.out.println(HttpUtils.post("http://127.0.0.1:18080/client/login", headers, parameter));
     }
 
     @Test

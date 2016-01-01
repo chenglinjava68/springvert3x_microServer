@@ -18,7 +18,6 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.JWTAuthHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +44,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                         .put("password", "secret")));
 
         // protect the API
-        router.route("/api/*").handler(JWTAuthHandler.create(jwt, "/api/newToken"));
+//        router.route("/*").handler(JWTAuthHandler.create(jwt, "/client/login"));
 
 //        router.route().handler(CookieHandler.create());
 //        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
@@ -54,12 +53,12 @@ public class HttpServerVerticle extends AbstractVerticle {
 //
 
         // this route is excluded from the auth handler
-        router.get("/api/newToken").handler(ctx -> {
-            ctx.response().putHeader("Content-Type", "text/plain");
-            String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(1 * 60));
-            ctx.response().end(generateToken);
-            redisCacheService.put("token", generateToken, 1 * 60);
-        });
+//        router.get("/api/newToken").handler(ctx -> {
+//            ctx.response().putHeader("Content-Type", "text/plain");
+//            String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(1 * 60));
+//            ctx.response().end(generateToken);
+//            redisCacheService.put("token", generateToken, 1 * 60);
+//        });
 
         router.route("/client/login").handler(
                 req -> {
@@ -100,7 +99,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                         } else {
                             resp.setCode(1201);
                             resp.setMsg("this username or password is wrong");
-                            req.response().end(JSON.toJSONString(response));
+                            req.response().end(JSON.toJSONString(resp));
                         }
                     });
                 });
