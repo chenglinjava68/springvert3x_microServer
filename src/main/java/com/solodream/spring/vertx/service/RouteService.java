@@ -68,6 +68,7 @@ public class RouteService {
             for (PoiInfoDto poi : pois) {
                 if (DistanceUtil.checkRange(startlng, startlat, poi.getLongitude(), poi.getLatitude(), 200)) {
                     mark = true;
+                    continue;
                 }
                 if (mark) {
                     GetPoiListResp.PoiInfo poiresp = new GetPoiListResp.PoiInfo();
