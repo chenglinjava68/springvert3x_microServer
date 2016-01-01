@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.solodream.spring.vertx.mapper.PoiInfoMapper">
+
+    <resultMap id="PoiInfoMap" type="com.solodream.spring.vertx.jpa.domain.PoiInfoDto">
+        <result column="ID" property="id" />
+        <result column="ORG_ID" property="orgId" />
+        <result column="NAME" property="name" />
+        <result column="ADDRESS" property="address" />
+        <result column="POSTCODE" property="postcode" />
+        <result column="DESCRIPTION" property="description" />
+        <result column="LNG" property="lng" />
+        <result column="LAT" property="lat" />
+        <result column="RADIUS" property="radius" />
+        <result column="IS_DELETED" property="isDeleted" />
+        <result column="GMT_CREATED" property="gmtCreated" />
+        <result column="GMT_MODIFIED" property="gmtModified" />
+        <result column="EXTEND" property="extend" />
+        <result column="CUSTOMER_ID" property="customerId" />
+        <result column="CUSTOMER_NAME" property="customerName" />
+        <result column="CUSTOMER_PHONE" property="customerPhone" />
+        <result column="COMPANY_ID" property="companyId" />
+        <result column="COMPANY_NAME" property="companyName" />
+        <result column="TYPE" property="type" />
+        <result column="UPDATEBY" property="updateBy" />
+    </resultMap>
+
+    <sql id="tableName">
+       tb_poi_info
+    </sql>
+
+    <sql id="allColumns">
+        ID, ORG_ID, NAME, ADDRESS, POSTCODE, DESCRIPTION, LNG, LAT, RADIUS,  IS_DELETED, GMT_CREATED, GMT_MODIFIED, EXTEND,CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_PHONE,COMPANY_ID,COMPANY_NAME,TYPE,UPDATEBY
+    </sql>
+
+    <insert id="insert" parameterType="com.solodream.spring.vertx.jpa.domain.PoiInfoDto" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO 
+            <include refid="tableName" /> 
+            (<include refid="allColumns" />) 
+        VALUES
+            (null, #{orgId}, #{name}, #{address}, #{postcode}, #{description}, #{lng}, #{lat}, #{radius},  0, now(), now(), #{extend},#{customerId},#{customerName},#{customerPhone},#{companyId},#{companyName},#{type},#{updateBy})
+    </insert>
+
+    <update id="update" parameterType="com.solodream.spring.vertx.jpa.domain.PoiInfoDto">
+        UPDATE 
+            <include refid="tableName" />
+        SET 
+            GMT_MODIFIED = now(),
+        <trim suffixOverrides=",">
+            <if test="poiInfo.orgId != null"> ORG_ID = #{poiInfo.orgId},</if>
+            <if test="poiInfo.name != null"> NAME = #{poiInfo.name},</if>
+            <if test="poiInfo.address != null"> ADDRESS = #{poiInfo.address},</if>
+            <if test="poiInfo.postcode != null"> POSTCODE = #{poiInfo.postcode},</if>
+            <if test="poiInfo.description != null"> DESCRIPTION = #{poiInfo.description},</if>
+            <if test="poiInfo.lng != null"> LNG = #{poiInfo.lng},</if>
+            <if test="poiInfo.lat != null"> LAT = #{poiInfo.lat},</if>
+            <if test="poiInfo.radius != null"> RADIUS = #{poiInfo.radius},</if>
+            <if test="poiInfo.extend != null"> EXTEND = #{poiInfo.extend},</if>
+            <if test="poiInfo.updateBy != null">UPDATEBY = #{poiInfo.updateBy},</if>
+            <if test="poiInfo.customerName != null">CUSTOMER_NAME = #{poiInfo.customerName},</if>
+            <if test="poiInfo.customerId != null">CUSTOMER_ID = #{poiInfo.customerId},</if>
+            <if test="poiInfo.customerPhone != null">CUSTOMER_PHONE = #{poiInfo.customerPhone},</if>
+            <if test="poiInfo.companyId != null">COMPANY_ID = #{poiInfo.companyId},</if>
+            <if test="poiInfo.companyName != null">COMPANY_NAME = #{poiInfo.companyName},</if>
+            <if test="poiInfo.type != null">TYPE = #{poiInfo.type},</if>
+        </trim>
+        WHERE 
+            ID = #{poiInfo.id}
+        AND
+            IS_DELETED = 0
+    </update>
+
+    <update id="delete">
+        UPDATE
+            <include refid="tableName" />
+        SET
+            IS_DELETED = 1,
+            GMT_MODIFIED = NOW()
+        WHERE
+            ID = #{id}
+    </update>
+
+    <update id="deletes">
+        UPDATE
+            <include refid="tableName" />
+        SET
+            IS_DELETED = 1,
+            GMT_MODIFIED = NOW()
+        WHERE
+            ID IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+            </foreach>
+    </update>
+
+    <select id="get" resultMap="PoiInfoMap">
+        SELECT
+            <include refid="allColumns" />
+        FROM
+            <include refid="tableName" />
+        WHERE
+            ID = #{id}
+        AND
+            IS_DELETED = 0
+        LIMIT
+            1
+    </select>
+
+    <select id="gets" resultMap="PoiInfoMap">
+        SELECT
+            <include refid="allColumns" />
+        FROM
+            <include refid="tableName" />
+        WHERE
+            ID IN
+            <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+            </foreach>
+        AND
+            IS_DELETED = 0
+        ORDER BY
+            ID DESC
+    </select>
+
+    <select id="query" parameterType="Map" resultMap="PoiInfoMap">
+        SELECT
+            <include refid="allColumns" />
+        FROM
+            <include refid="tableName" />
+        <include refid="where"/>
+        ORDER BY
+            ID DESC
+        LIMIT
+            1
+    </select>
+
+    <select id="querys" parameterType="Map" resultMap="PoiInfoMap">
+        SELECT
+            <include refid="allColumns" />
+        FROM
+            <include refid="tableName" />
+        <include refid="where"/>
+        ORDER BY
+            ID DESC
+    </select>
+
+    <select id="list" parameterType="Map" resultMap="PoiInfoMap">
+        SELECT
+            <include refid="allColumns" />
+        FROM
+            <include refid="tableName" />
+        <include refid="where"/>
+    </select>
+
+    <select id="listAll" parameterType="Map" resultMap="PoiInfoMap">
+        SELECT
+            <include refid="allColumns" />
+        FROM
+            <include refid="tableName" />
+        WHERE
+            IS_DELETED = 0
+        ORDER BY
+            ID DESC
+    </select>
+
+    <select id="count" parameterType="Map" resultType="int">
+        SELECT 
+            COUNT(0) 
+        FROM 
+            <include refid="tableName" />
+        <include refid="where"/>
+    </select>
+
+    <sql id="where">
+        WHERE IS_DELETED = 0
+        <if test="poiInfo != null">
+            <if test="poiInfo.id != null"> AND ID = #{poiInfo.id}</if>
+            <if test="poiInfo.orgId != null"> AND ORG_ID = #{poiInfo.orgId}</if>
+            <if test="poiInfo.name != null"> AND NAME = #{poiInfo.name}</if>
+            <if test="poiInfo.address != null"> AND ADDRESS = #{poiInfo.address}</if>
+            <if test="poiInfo.postcode != null"> AND POSTCODE = #{poiInfo.postcode}</if>
+            <if test="poiInfo.description != null"> AND DESCRIPTION = #{poiInfo.description}</if>
+            <if test="poiInfo.lng != null"> AND LNG = #{poiInfo.lng}</if>
+            <if test="poiInfo.lat != null"> AND LAT = #{poiInfo.lat}</if>
+            <if test="poiInfo.radius != null"> AND RADIUS = #{poiInfo.radius}</if>
+            <if test="poiInfo.updateBy != null"> AND UPDATEBY = #{poiInfo.updateBy}</if>
+            <if test="poiInfo.extend != null"> AND EXTEND = #{poiInfo.extend}</if>
+            <if test="poiInfo.customerName != null"> AND CUSTOMER_NAME = #{poiInfo.customerName}</if>
+            <if test="poiInfo.customerId != null"> AND CUSTOMER_ID = #{poiInfo.customerId}</if>
+            <if test="poiInfo.customerPhone != null"> AND CUSTOMER_PHONE = #{poiInfo.customerPhone}</if>
+            <if test="poiInfo.companyId != null"> AND COMPANY_ID = #{poiInfo.companyId}</if>
+            <if test="poiInfo.companyName != null"> AND COMPANY_NAME = #{poiInfo.companyName}</if>
+            <if test="poiInfo.type != null"> AND TYPE = #{poiInfo.type}</if>           
+        </if>
+        <if test="keyword != null and keyword != ''">
+        	AND (NAME LIKE '%${keyword}%' OR ADDRESS LIKE '%${keyword}%' OR DESCRIPTION LIKE '%${keyword}%')
+        </if>
+    </sql>
+
+    <!-- ======================================= custom method ======================================= -->
+
+
+    <update id="deletePoiByCustomer">
+        UPDATE
+        <include refid="tableName" />
+        SET
+        IS_DELETED = 1,
+        GMT_MODIFIED = NOW()
+        WHERE
+        customer_id IN
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+
+</mapper>
