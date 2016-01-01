@@ -96,7 +96,8 @@ public class HttpServerVerticle extends AbstractVerticle {
                             resp.setCompanyName(accountInfoDto.getCompanyName());
                             resp.setCustomerName(accountInfoDto.getCustomerName());
                             resp.setCustomerId(accountInfoDto.getCustomerId().toString());
-//                            resp.setContractId(accountInfoDto.get);
+                            resp.setContractId(accountInfoDto.getId().toString());
+                            resp.setContractName(accountInfoDto.getNo());
                             response.setData(resp);
                             req.response().end(JSON.toJSONString(response));
 
@@ -177,6 +178,30 @@ public class HttpServerVerticle extends AbstractVerticle {
                     });
                 });
 
+
+        router.route("/shuttle/from").handler(
+                req -> {
+                    LOGGER.info("Received a http request to /shuttle/from");
+                    String version = req.request().getParam("token");
+                    vertx.eventBus().send("version", version, ar -> {
+                        if (ar.succeeded()) {
+                            LOGGER.info("Received reply: " + ar.result().body());
+                            req.response().end((String) ar.result().body());
+                        }
+                    });
+                });
+
+        router.route("/shuttle/to").handler(
+                req -> {
+                    LOGGER.info("Received a http request to /shuttle/to");
+                    String version = req.request().getParam("token");
+                    vertx.eventBus().send("version", version, ar -> {
+                        if (ar.succeeded()) {
+                            LOGGER.info("Received reply: " + ar.result().body());
+                            req.response().end((String) ar.result().body());
+                        }
+                    });
+                });
 
         router.route("/token").handler(
                 req -> {
