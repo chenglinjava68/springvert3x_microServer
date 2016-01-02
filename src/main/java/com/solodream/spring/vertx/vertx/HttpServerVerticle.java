@@ -18,6 +18,7 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.JWTAuthHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -134,11 +135,15 @@ public class HttpServerVerticle extends AbstractVerticle {
 
                     });
                 });
-        router.route("/*").handler(req -> {
-            LOGGER.info("Any requests to URI starting '/' require login");
-            // No auth required
-            req.next();
-        });
+//        router.route("/*").handler(req -> {
+//            LOGGER.info("Any requests to URI starting '/' require login");
+//            // No auth required
+//            req.next();
+//        });
+        // protect the API
+        router.route("/*").handler(JWTAuthHandler.create(jwt, "/client/login"));
+
+
 
         router.route("/client/getLastVersion").handler(
                 req -> {
@@ -156,7 +161,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                 req -> {
                     LOGGER.info("Received a http request to /client/logout");
                     JsonObject device = req.getBodyAsJson();
-                    vertx.eventBus().send("device", device, ar -> {
+                    vertx.eventBus().send("logout", device, ar -> {
                         if (ar.succeeded()) {
                             LOGGER.info("Received reply: " + ar.result().body());
                             req.response().end((String) ar.result().body());
@@ -166,15 +171,11 @@ public class HttpServerVerticle extends AbstractVerticle {
 
 
         router.route("/client/getDeviceId").handler(
-                req -> {
+                ctx -> {
                     LOGGER.info("Received a http request to /client/getDeviceId");
-                    JsonObject device = req.getBodyAsJson();
-                    vertx.eventBus().send("device", device, ar -> {
-                        if (ar.succeeded()) {
-                            LOGGER.info("Received reply: " + ar.result().body());
-                            req.response().end((String) ar.result().body());
-                        }
-                    });
+                    JsonObject jsonString = ctx.getBodyAsJson();
+                    ctx.response().putHeader("Content-Type", "text/plain");
+                    ctx.response().end("123456");
                 });
 
 
@@ -201,19 +202,6 @@ public class HttpServerVerticle extends AbstractVerticle {
                         }
                     });
                 });
-
-        router.route("/token").handler(
-                req -> {
-                    LOGGER.info("Received a http request");
-                    String version = req.request().getParam("token");
-                    vertx.eventBus().send("version", version, ar -> {
-                        if (ar.succeeded()) {
-                            LOGGER.info("Received reply: " + ar.result().body());
-                            req.response().end((String) ar.result().body());
-                        }
-                    });
-                });
-
         vertx.createHttpServer().requestHandler(router::accept).listen(18080);
         LOGGER.info("Started HttpServer(port=18080).");
     }
