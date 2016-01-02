@@ -231,6 +231,7 @@
     </dependencies>
 
     <build>
+        <finalName>soloVertx3_microserver</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
