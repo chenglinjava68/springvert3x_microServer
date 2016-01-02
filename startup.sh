@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 start(){
  now=`date "+%Y%m%d%H%M%S"`
- exec java -Xms256m -Xmx512m -jar /alidata/server/webapps/springvert3x_microServer.jar 5 >"$now"_bidcheck.log &
+ exec java -Xms256m -Xmx512m -jar /Users/young/opensources/springvert3x_microServer/target/spring-boot-vertx-1.0-SNAPSHOT.jar 5 >"$now"_bidcheck.log &
  #java -Xms128m -Xmx2048m -jar test2.jar 5 > log.log &  
  #tail -f result.log  
 }
