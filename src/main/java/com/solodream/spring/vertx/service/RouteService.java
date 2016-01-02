@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.solodream.spring.vertx.common.DistanceUtil;
 import com.solodream.spring.vertx.jpa.domain.PoiInfoDto;
 import com.solodream.spring.vertx.jpa.domain.RouteContractInfoDto;
+import com.solodream.spring.vertx.mapper.PoiInfoMapper;
 import com.solodream.spring.vertx.mapper.RouteInfoMapper;
 import com.solodream.spring.vertx.req.client.GetRouteDetailReq;
 import com.solodream.spring.vertx.resp.poi.GetPoiListResp;
@@ -20,6 +21,8 @@ import java.util.List;
 public class RouteService {
     @Autowired
     private RouteInfoMapper routeInfoMapper;
+    @Autowired
+    private PoiInfoMapper poiInfoMapper;
 
     public GetPoiListResp from(GetRouteDetailReq request) {
         RouteContractInfoDto routeContractInfoDto = new RouteContractInfoDto();
@@ -59,8 +62,10 @@ public class RouteService {
         if (request.getContractId() != null)
             routeContractInfoDto.setContractId(Integer.parseInt(request.getContractId()));
         List<RouteContractInfoDto> dtos = routeInfoMapper.querys(routeContractInfoDto, request.getKeyword());
-        String startlat = request.getStartlat();
-        String startlng = request.getStartlng();
+        String fromId = request.getFromId();
+        PoiInfoDto fromPoi = poiInfoMapper.get(Integer.parseInt(fromId));
+        String startlat = fromPoi.getLatitude();
+        String startlng = fromPoi.getLongitude();
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
         for (RouteContractInfoDto dto : dtos) {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
