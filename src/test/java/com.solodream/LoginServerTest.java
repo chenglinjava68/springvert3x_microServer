@@ -26,8 +26,8 @@ public class LoginServerTest {
 
         UserLoginRequestParam param = new UserLoginRequestParam();
         param.setDeviceId("123456788");
-        param.setUsername("TestAccount24");
-        param.setPassword("123456steven");
+        param.setUsername("tesla");
+        param.setPassword("password");
         param.setSmsCode("12345");
 
         request.setParam(param);
@@ -38,7 +38,8 @@ public class LoginServerTest {
 
         System.out.println(HttpUtils.post("http://127.0.0.1:18080/client/login", headers, parameter));
     }
-
+//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTE2NjAzODcsImV4cCI6MTQ1MjI2NTE4Nywic3ViIjoidGVzbGEifQ==.-1k2tomKnmx5sKW-Sk0SmL0a4VKIpz45_Cdonki1ZUs=
+//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTE2NjA0NzMsImV4cCI6MTQ1MjI2NTI3Mywic3ViIjoidGVzbGEifQ==.5alHtPJvyDgg8JagQ4nefjqv_6zQ5XxlbxEvM5ms4c8=
     @Test
     public void testGetAccessToken()throws  Exception{
         List<Header> headers = new ArrayList<Header>();
@@ -48,7 +49,7 @@ public class LoginServerTest {
         request.setToken("");
 
         TokenRequestParam param = new TokenRequestParam();
-        param.setRefreshToken("c7c57afdb3d397d6fa8a9189096445a2");
+        param.setRefreshToken("5483d6c4ebbd995e1b02c65dc0da46cb");
 
         request.setParam(param);
         String parameter = JSON.toJSONString(request);
@@ -56,6 +57,6 @@ public class LoginServerTest {
 
         System.out.println(parameter);
 
-        System.out.println(HttpUtils.post("http://127.0.0.1:18080/getAccessToken/", headers, parameter));
+        System.out.println(HttpUtils.post("http://127.0.0.1:18080/client/getAccessToken/", headers, parameter));
     }
 }

@@ -15,8 +15,8 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>spring-boot-vertx</name>
-    <description>Sample impl Spring-Boot Vertx</description>
+    <name>soloVertx3_microserver</name>
+    <description>solodream impl Spring-Boot Vertx</description>
 
     <properties>
         <start-class>com.solodream.spring.vertx.Application</start-class>
@@ -236,7 +236,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>${start-class}</mainClass>
+                    <mainClass>soloVertx3_microserver</mainClass>
                     <jvmArguments>-Xms512m -Xmx1024m -Xdebug
                         -Xrunjdwp:server=y,transport=dt_socket,address=${debug.port},suspend=n
                         -Denv=${project.build.testOutputDirectory}/application</jvmArguments>
