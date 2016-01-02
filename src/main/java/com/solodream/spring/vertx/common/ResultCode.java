@@ -78,7 +78,9 @@ public enum ResultCode {
 
     USER_NOT_EXIT(2201),
 
-    USER_NOT_EXIST(2202);
+    USER_NOT_EXIST(2202),
+
+    TOKEN_NOT_EXIT(400);
 
     ResultCode(int code) {
         this.code = code;

@@ -1,16 +1,14 @@
 package com.solodream.spring.vertx.auth.impl;
 
-import com.solodream.spring.vertx.jpa.model.Contract;
+import com.solodream.spring.vertx.common.ResultCode;
 import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.Vertx;
-import io.vertx.ext.auth.User;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.Session;
 import io.vertx.ext.web.handler.UserSessionHandler;
-import io.vertx.ext.web.handler.impl.UserHolder;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Created by young on 15/12/1.
@@ -33,34 +31,45 @@ public class SoloAuthProviderImpl implements UserSessionHandler {
     @Override
     public void handle(RoutingContext routingContext) {
         LOGGER.info(">>>>>>>>>>>>>>>  Any request have to be intercept");
+        JsonObject jsonString = routingContext.getBodyAsJson();
+        String requestStr = jsonString.toString();
+        String tokenPrefix = requestStr.split("\"token\":\"")[1];
+        String keyToken = tokenPrefix.split("\"")[0];
+        LOGGER.info("Token is " + keyToken);
 
-//        Contract result=(Contract)redisCacheService.getObject("123");
-//        System.out.println(result.getName());
-
-        Session session = routingContext.session();
-        if (session != null) {
-            LOGGER.info("session is not exit ,please u have to login");
-            User user = null;
-            UserHolder holder = session.get(SESSION_USER_HOLDER_KEY);
-            if (holder != null) {
-                RoutingContext prevContext = holder.context;
-                if (prevContext != null) {
-                    user = prevContext.user();
-                } else if (holder.user != null) {
-                    user = holder.user;
-                    // user.setAuthProvider(authProvider);
-                    holder.context = routingContext;
-                    holder.user = null;
-                }
-                holder.context = routingContext;
-            } else {
-                session.put(SESSION_USER_HOLDER_KEY, new UserHolder(routingContext));
-            }
-            if (user != null) {
-                routingContext.setUser(user);
-            }
+//        redisCacheService.put(keyToken,keyToken);
+        String value = redisCacheService.get(keyToken);
+        if (StringUtils.isEmpty(value)) {
+            LOGGER.info("this token didn't exit redis cache");
+            routingContext.fail(ResultCode.TOKEN_NOT_EXIT.code());
+        } else {
+            routingContext.next();
         }
-        routingContext.next();
+//        Session session = routingContext.session();
+//        if (session != null) {
+//            LOGGER.info("session is not exit ,please u have to login");
+//            User user = null;
+//            UserHolder holder = session.get(SESSION_USER_HOLDER_KEY);
+//            if (holder != null) {
+//                RoutingContext prevContext = holder.context;
+//                if (prevContext != null) {
+//                    user = prevContext.user();
+//                } else if (holder.user != null) {
+//                    user = holder.user;
+//                    // user.setAuthProvider(authProvider);
+//                    holder.context = routingContext;
+//                    holder.user = null;
+//                }
+//                holder.context = routingContext;
+//            } else {
+//                session.put(SESSION_USER_HOLDER_KEY, new UserHolder(routingContext));
+//            }
+//            if (user != null) {
+//                routingContext.setUser(user);
+//            }
+//        }
+
+
     }
 
 }

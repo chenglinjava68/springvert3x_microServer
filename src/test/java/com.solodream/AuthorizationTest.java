@@ -22,7 +22,7 @@ public class AuthorizationTest {
         headers.add(new BasicHeader("Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTE3MDQzNDYsImV4cCI6MTQ1MjMwOTE0Niwic3ViIjoidGVzbGEifQ==.bs-KI0lXF1LU7LAlaq9sApqYNiq_QLZx86Mw2o_snZs="));
 
         BaseReq<TokenRequestParam> request = new BaseReq<TokenRequestParam>();
-        request.setToken("");
+        request.setToken("123");
 
         TokenRequestParam param = new TokenRequestParam();
         param.setRefreshToken("5483d6c4ebbd995e1b02c65dc0da46cb");

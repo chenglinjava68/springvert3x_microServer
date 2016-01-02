@@ -3,6 +3,7 @@ package com.solodream.spring.vertx.vertx;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.hazelcast.util.MD5Util;
+import com.solodream.spring.vertx.auth.SoloAuthProvider;
 import com.solodream.spring.vertx.common.DateUtil;
 import com.solodream.spring.vertx.common.ResultCode;
 import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
@@ -51,7 +52,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 //        router.route().handler(CookieHandler.create());
 //        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 //        router.route().handler(BodyHandler.create());
-//        router.route("/*").handler(SoloAuthProvider.create(vertx,redisCacheService));
+
 //
 
 
@@ -130,8 +131,8 @@ public class HttpServerVerticle extends AbstractVerticle {
                 });
 
         // protect the API
+        router.route("/*").handler(SoloAuthProvider.create(vertx, redisCacheService));
         router.route("/*").handler(JWTAuthHandler.create(jwt, "/client/login"));
-
 
 
         router.route("/client/getLastVersion").handler(

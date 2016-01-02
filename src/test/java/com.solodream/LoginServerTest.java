@@ -20,23 +20,21 @@ public class LoginServerTest {
     public void testLogin() throws Exception {
         List<Header> headers = new ArrayList<Header>();
         headers.add(new BasicHeader("Content-Type", "application/json"));
-
         BaseReq<UserLoginRequestParam> request = new BaseReq<UserLoginRequestParam>();
-        request.setToken("");
-
+        request.setToken("403b87da81e25c5e9cf8b091481464bb");
         UserLoginRequestParam param = new UserLoginRequestParam();
         param.setDeviceId("123456788");
         param.setUsername("tesla");
         param.setPassword("password");
         param.setSmsCode("12345");
-
         request.setParam(param);
         String parameter = JSON.toJSONString(request);
-
-
         System.out.println(parameter);
 
-        System.out.println(HttpUtils.post("http://127.0.0.1:18080/client/login", headers, parameter));
+        String tokenPrefix = parameter.split("\"token\":\"")[1];
+
+        System.out.println(tokenPrefix.split("\"")[0]);
+//        System.out.println(HttpUtils.post("http://115.28.65.172:18080/client/login", headers, parameter));
     }
 //eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTE2NjAzODcsImV4cCI6MTQ1MjI2NTE4Nywic3ViIjoidGVzbGEifQ==.-1k2tomKnmx5sKW-Sk0SmL0a4VKIpz45_Cdonki1ZUs=
 //eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTE2NjA0NzMsImV4cCI6MTQ1MjI2NTI3Mywic3ViIjoidGVzbGEifQ==.5alHtPJvyDgg8JagQ4nefjqv_6zQ5XxlbxEvM5ms4c8=
@@ -49,7 +47,7 @@ public class LoginServerTest {
         request.setToken("");
 
         TokenRequestParam param = new TokenRequestParam();
-        param.setRefreshToken("5483d6c4ebbd995e1b02c65dc0da46cb");
+        param.setRefreshToken("403b87da81e25c5e9cf8b091481464bb");
 
         request.setParam(param);
         String parameter = JSON.toJSONString(request);
@@ -57,6 +55,6 @@ public class LoginServerTest {
 
         System.out.println(parameter);
 
-        System.out.println(HttpUtils.post("http://127.0.0.1:18080/client/getAccessToken/", headers, parameter));
+        System.out.println(HttpUtils.post("http://115.28.65.172:18080/client/getAccessToken/", headers, parameter));
     }
 }
