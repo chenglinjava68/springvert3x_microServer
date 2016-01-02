@@ -53,13 +53,6 @@ public class HttpServerVerticle extends AbstractVerticle {
 //        router.route("/*").handler(SoloAuthProvider.create(vertx,redisCacheService));
 //
 
-        // this route is excluded from the auth handler
-//        router.get("/api/newToken").handler(ctx -> {
-//            ctx.response().putHeader("Content-Type", "text/plain");
-//            String generateToken = jwt.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(1 * 60));
-//            ctx.response().end(generateToken);
-//            redisCacheService.put("token", generateToken, 1 * 60);
-//        });
 
         router.route("/client/login").handler(
                 req -> {
@@ -70,7 +63,6 @@ public class HttpServerVerticle extends AbstractVerticle {
                     vertx.eventBus().send("login", jsonString, ar -> {
                         if (ar.succeeded()) {
                             String dto = (String) ar.result().body();
-//                            ReqHandle.setOperator(req.session(), (String) ar.result().body());
                             LOGGER.info("Received reply: " + ar.result().body());
                             ClientAccountInfoDto accountInfoDto = JSON.parseObject(dto, new TypeReference<ClientAccountInfoDto>() {
                             });
@@ -135,11 +127,7 @@ public class HttpServerVerticle extends AbstractVerticle {
 
                     });
                 });
-//        router.route("/*").handler(req -> {
-//            LOGGER.info("Any requests to URI starting '/' require login");
-//            // No auth required
-//            req.next();
-//        });
+
         // protect the API
         router.route("/*").handler(JWTAuthHandler.create(jwt, "/client/login"));
 
