@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.TypeReference;
 import com.hazelcast.util.MD5Util;
 import com.solodream.spring.vertx.common.DateUtil;
+import com.solodream.spring.vertx.common.ResultCode;
 import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
 import com.solodream.spring.vertx.req.JsonReq;
 import com.solodream.spring.vertx.req.client.SmsRequestParam;
@@ -90,7 +91,7 @@ public class HttpServerVerticle extends AbstractVerticle {
                             req.response().end(JSON.toJSONString(response));
 
                         } else {
-                            resp.setCode(1201);
+                            resp.setCode(ResultCode.USER_NOT_EXIST.code());
                             resp.setMsg("this username or password is wrong");
                             req.response().end(JSON.toJSONString(resp));
                         }
