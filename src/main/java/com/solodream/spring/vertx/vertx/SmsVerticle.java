@@ -1,6 +1,5 @@
 package com.solodream.spring.vertx.vertx;
 
-import com.solodream.spring.vertx.service.ClientService;
 import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.AbstractVerticle;
 import org.slf4j.Logger;
