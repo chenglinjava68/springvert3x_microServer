@@ -33,11 +33,8 @@ public class LoginServerTest {
 
         String tokenPrefix = parameter.split("\"token\":\"")[1];
 
-        System.out.println(tokenPrefix.split("\"")[0]);
-//        System.out.println(HttpUtils.post("http://115.28.65.172:18080/client/login", headers, parameter));
+        System.out.println(HttpUtils.post("http://127.0.0.1:18080/client/login", headers, parameter));
     }
-//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTE2NjAzODcsImV4cCI6MTQ1MjI2NTE4Nywic3ViIjoidGVzbGEifQ==.-1k2tomKnmx5sKW-Sk0SmL0a4VKIpz45_Cdonki1ZUs=
-//eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE0NTE2NjA0NzMsImV4cCI6MTQ1MjI2NTI3Mywic3ViIjoidGVzbGEifQ==.5alHtPJvyDgg8JagQ4nefjqv_6zQ5XxlbxEvM5ms4c8=
     @Test
     public void testGetAccessToken()throws  Exception{
         List<Header> headers = new ArrayList<Header>();
@@ -55,6 +52,6 @@ public class LoginServerTest {
 
         System.out.println(parameter);
 
-        System.out.println(HttpUtils.post("http://115.28.65.172:18080/client/getAccessToken/", headers, parameter));
+        System.out.println(HttpUtils.post("http://127.0.0.1:18080/client/getAccessToken/", headers, parameter));
     }
 }
