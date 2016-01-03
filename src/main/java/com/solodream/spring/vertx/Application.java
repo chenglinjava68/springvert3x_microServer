@@ -49,7 +49,6 @@ public class Application {
         vertx.deployVerticle(context.getBean(LoginVerticle.class), new DeploymentOptions().setWorker(true));
         vertx.deployVerticle(context.getBean(SmsVerticle.class), new DeploymentOptions().setWorker(true));
         vertx.deployVerticle(context.getBean(VersionVerticle.class), new DeploymentOptions().setWorker(true));
-        vertx.deployVerticle(context.getBean(TokenVerticle.class), new DeploymentOptions().setWorker(true));
         vertx.deployVerticle(context.getBean(RouteFromVerticle.class), new DeploymentOptions().setWorker(true));
         vertx.deployVerticle(context.getBean(RouteToVerticle.class), new DeploymentOptions().setWorker(true));
         vertx.deployVerticle(context.getBean(HttpServerVerticle.class));
