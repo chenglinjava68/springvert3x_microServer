@@ -13,8 +13,9 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  */
+
 /**
- * Created by young on 16/1/1.
- * support for mutli-Verticle,Most applications will want to extend {@link io.vertx.core.AbstractVerticle}
+ * Created by young on 16/1/3.
+ * The core package for the Vertx application
  */
-package com.solodream.spring.vertx.vertx;
+package com.solodream.spring.vertx;
