@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * Created by young on 16/1/1.
@@ -37,21 +36,19 @@ public class RouteService {
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
         for (RouteContractInfoDto dto : dtos) {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
-            pois.forEach(new Consumer<PoiInfoDto>() {
-                @Override
-                public void accept(PoiInfoDto poi) {
-                    GetPoiListResp.PoiInfo poiresp = new GetPoiListResp.PoiInfo();
-                    poiresp.setLongitude(poi.getLongitude());
-                    poiresp.setLatitude(poi.getLatitude());
-                    poiresp.setPostCode(poi.getPostcode());
-                    poiresp.setAddress(poi.getAddress());
-                    poiresp.setRemark(poi.getDescription());
-                    poiresp.setCompanyId(poi.getCompanyId());
-                    poiresp.setCustomerId(poi.getCustomerId());
-                    poiresp.setId(poi.getId());
-                    routeSet.add(poiresp);
-                }
-            });
+            pois.forEach((PoiInfoDto poi) -> {
+                        GetPoiListResp.PoiInfo poiresp = new GetPoiListResp.PoiInfo();
+                        poiresp.setLongitude(poi.getLongitude());
+                        poiresp.setLatitude(poi.getLatitude());
+                        poiresp.setPostCode(poi.getPostcode());
+                        poiresp.setAddress(poi.getAddress());
+                        poiresp.setRemark(poi.getDescription());
+                        poiresp.setCompanyId(poi.getCompanyId());
+                        poiresp.setCustomerId(poi.getCustomerId());
+                        poiresp.setId(poi.getId());
+                        routeSet.add(poiresp);
+                    }
+            );
 
         }
         GetPoiListResp resp = new GetPoiListResp();
@@ -72,9 +69,12 @@ public class RouteService {
         String startlat = fromPoi.getLatitude();
         String startlng = fromPoi.getLongitude();
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
+
         for (RouteContractInfoDto dto : dtos) {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
             boolean mark = false;
+
+
             for (PoiInfoDto poi : pois) {
                 if (DistanceUtil.checkRange(startlng, startlat, poi.getLongitude(), poi.getLatitude(), 200)) {
                     mark = true;
@@ -109,6 +109,7 @@ public class RouteService {
             routeContractInfoDto.setContractId(Integer.parseInt(request.getContractId()));
         List<RouteContractInfoDto> dtos = routeInfoMapper.querys(routeContractInfoDto, request.getKeyword());
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
+
         for (RouteContractInfoDto dto : dtos) {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
 
