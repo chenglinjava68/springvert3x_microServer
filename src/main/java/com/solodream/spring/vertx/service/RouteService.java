@@ -34,7 +34,7 @@ public class RouteService {
         }
         List<RouteContractInfoDto> dtos = routeInfoMapper.querys(routeContractInfoDto, request.getKeyword());
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
-        for (RouteContractInfoDto dto : dtos) {
+        dtos.forEach((RouteContractInfoDto dto) -> {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
             pois.forEach((PoiInfoDto poi) -> {
                         GetPoiListResp.PoiInfo poiresp = new GetPoiListResp.PoiInfo();
@@ -50,7 +50,7 @@ public class RouteService {
                     }
             );
 
-        }
+        });
         GetPoiListResp resp = new GetPoiListResp();
         resp.setDataList(routeSet);
         resp.setTotal(String.valueOf(routeSet.size()));
