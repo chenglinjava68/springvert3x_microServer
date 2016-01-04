@@ -110,7 +110,7 @@ public class RouteService {
         List<RouteContractInfoDto> dtos = routeInfoMapper.querys(routeContractInfoDto, request.getKeyword());
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
 
-        for (RouteContractInfoDto dto : dtos) {
+        dtos.forEach((RouteContractInfoDto dto) -> {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
 
             PoiInfoDto poi = pois.get(0);
@@ -136,7 +136,7 @@ public class RouteService {
             poiresplast.setCustomerId(poilast.getCustomerId());
             poiresplast.setId(poilast.getId());
             routeSet.add(poiresplast);
-        }
+        });
 
         GetPoiListResp resp = new GetPoiListResp();
         resp.setDataList(routeSet);
