@@ -131,11 +131,4 @@ public class HttpUtils {
         }
     }
 
-    public static void main(String[] args) throws Exception {
-
-        List<Header> headers = new ArrayList<Header>();
-        headers.add(new BasicHeader("Content-Type", "application/json"));
-
-        System.out.println(post("http://127.0.0.1:8080/parameter/get", headers, "{\"param\":{\"id\":\"x\"}}"));
-    }
 }
