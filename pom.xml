@@ -213,6 +213,11 @@
             <artifactId>druid</artifactId>
             <version>1.0.9</version>
         </dependency>
+        <dependency>
+            <groupId>org.weakref</groupId>
+            <artifactId>jmxutils</artifactId>
+            <version>1.18</version>
+        </dependency>
         <!-- Test -->
         <!-- TEST begin -->
         <dependency>
