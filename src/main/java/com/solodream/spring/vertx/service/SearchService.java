@@ -106,7 +106,9 @@ public class SearchService {
                     jobInfo.setDriverName(job.getDriverName());
                     jobInfo.setDriverPhone(job.getDriverMobile());
                     //if timestamp > 30,we don't need lat & lng  from station
-                    for (PoiInfoDto poi : pois) {
+
+                    pois.forEach((PoiInfoDto poi) -> {
+//                    for (PoiInfoDto poi : pois) {
                         if (DistanceUtil.checkRange(poi.getLongitude(), poi.getLatitude(), startlng, startlat, 200)) {
                             if (DateUtil.getOffsetMinutes(poi.getStationStartTime(), new Date()) < 30) {
                                 jobInfo.setLatitude(poi.getLatitude());
@@ -115,7 +117,7 @@ public class SearchService {
 //                                jobInfo.setSpeed(speed);
                             }
                         }
-                    }
+                    });
                     jobInfo.setDriverPhone(job.getDriverMobile());
                     jobInfo.setDriverName(job.getDriverName());
                     jobInfo.setDriverId(job.getDriverId());

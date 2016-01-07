@@ -30,8 +30,6 @@ public class RouteFromVerticle extends AbstractVerticle {
                 JsonObject jsonString = (JsonObject) message.body();
                 BaseReq<GetRouteDetailReq> obj = JSON.parseObject(jsonString.toString(), new TypeReference<BaseReq<GetRouteDetailReq>>() {
                 });
-
-
                 GetPoiListResp response = routeService.from(obj.getParam());
                 message.reply(JSON.toJSONString(response));
             } catch (Exception e) {
