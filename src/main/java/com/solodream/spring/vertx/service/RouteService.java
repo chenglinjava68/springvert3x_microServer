@@ -73,13 +73,9 @@ public class RouteService {
         String startlat = fromPoi.getLatitude();
         String startlng = fromPoi.getLongitude();
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
-
-
         dtos.forEach((RouteContractInfoDto dto) -> {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
             boolean mark = false;
-
-
             for (PoiInfoDto poi : pois) {
                 if (DistanceUtil.checkRange(startlng, startlat, poi.getLongitude(), poi.getLatitude(), 200)) {
                     mark = true;
@@ -148,9 +144,7 @@ public class RouteService {
 
             dataList.add(info);
         });
-
         GetRoutePoiListResp resp = new GetRoutePoiListResp();
-
         resp.setDataList(dataList);
         resp.setTotal("1");
         return resp;

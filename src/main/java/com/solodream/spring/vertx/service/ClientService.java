@@ -28,7 +28,6 @@ public class ClientService {
         return result;
     }
 
-
     public ClientVersionInfoDto getLastClientVersionInfoDto(int versionCode) {
         ClientVersionInfoDto versionInfoDto = clientVersionInfoMapper.getLastClientVersionInfoDto(versionCode);
         return versionInfoDto;
