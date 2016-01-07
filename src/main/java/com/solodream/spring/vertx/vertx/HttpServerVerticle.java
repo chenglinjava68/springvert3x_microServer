@@ -47,15 +47,9 @@ public class HttpServerVerticle extends AbstractVerticle {
                         .put("password", "secret")));
 
         // protect the API
-//        router.route("/*").handler(JWTAuthHandler.create(jwt, "/client/login"));
-
 //        router.route().handler(CookieHandler.create());
 //        router.route().handler(SessionHandler.create(LocalSessionStore.create(vertx)));
 //        router.route().handler(BodyHandler.create());
-
-//
-
-
         router.route("/client/login").handler(
                 req -> {
                     JsonObject jsonString = req.getBodyAsJson();
