@@ -74,7 +74,9 @@ public class RouteService {
         String startlng = fromPoi.getLongitude();
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
 
-        for (RouteContractInfoDto dto : dtos) {
+
+        dtos.forEach((RouteContractInfoDto dto) -> {
+//        for (RouteContractInfoDto dto : dtos) {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
             boolean mark = false;
 
@@ -97,7 +99,7 @@ public class RouteService {
                     routeSet.add(poiresp);
                 }
             }
-        }
+        });
         GetPoiListResp resp = new GetPoiListResp();
         resp.setDataList(routeSet);
         resp.setTotal(String.valueOf(routeSet.size()));
