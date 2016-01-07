@@ -61,10 +61,12 @@ public class RouteService {
 
     public GetPoiListResp to(GetRouteDetailReq request) {
         RouteContractInfoDto routeContractInfoDto = new RouteContractInfoDto();
-        if (request.getCustomerId() != null)
+        if (request.getCustomerId() != null) {
             routeContractInfoDto.setCustomerId(Integer.parseInt(request.getCustomerId()));
-        if (request.getContractId() != null)
+        }
+        if (request.getContractId() != null) {
             routeContractInfoDto.setContractId(Integer.parseInt(request.getContractId()));
+        }
         List<RouteContractInfoDto> dtos = routeInfoMapper.querys(routeContractInfoDto, request.getKeyword());
         String fromId = request.getFromId();
         PoiInfoDto fromPoi = poiInfoMapper.get(Integer.parseInt(fromId));
@@ -105,19 +107,21 @@ public class RouteService {
 
     public GetRoutePoiListResp list(GetRouteDetailReq request) {
         RouteContractInfoDto routeContractInfoDto = new RouteContractInfoDto();
-        if (request.getCustomerId() != null)
+        if (request.getCustomerId() != null) {
             routeContractInfoDto.setCustomerId(Integer.parseInt(request.getCustomerId()));
-        if (request.getContractId() != null)
+        }
+        if (request.getContractId() != null) {
             routeContractInfoDto.setContractId(Integer.parseInt(request.getContractId()));
+        }
         List<RouteContractInfoDto> dtos = routeInfoMapper.querys(routeContractInfoDto, request.getKeyword());
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
         List<RoutePoiInfo> dataList = new ArrayList<RoutePoiInfo>();
-        RoutePoiInfo info=new RoutePoiInfo();
+        RoutePoiInfo info = new RoutePoiInfo();
         dtos.forEach((RouteContractInfoDto dto) -> {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
 
             PoiInfoDto poi = pois.get(0);
-            RoutePoiInfo.RoutePoi poiresp=new RoutePoiInfo.RoutePoi();
+            RoutePoiInfo.RoutePoi poiresp = new RoutePoiInfo.RoutePoi();
             poiresp.setLongitude(poi.getLongitude());
             poiresp.setLatitude(poi.getLatitude());
             poiresp.setPostCode(poi.getPostcode());
@@ -130,7 +134,7 @@ public class RouteService {
 
 
             PoiInfoDto poilast = pois.get(pois.size() - 1);
-            RoutePoiInfo.RoutePoi poiresplast=new RoutePoiInfo.RoutePoi();
+            RoutePoiInfo.RoutePoi poiresplast = new RoutePoiInfo.RoutePoi();
             poiresplast.setLongitude(poilast.getLongitude());
             poiresplast.setLatitude(poilast.getLatitude());
             poiresplast.setPostCode(poilast.getPostcode());

@@ -44,7 +44,7 @@ public class SearchService {
 
         List<ScheduleInfoDto> jobs = scheduleInfoMapper.queryByTime(Integer.parseInt(request.getContractId()));
 
-        for (ScheduleInfoDto job : jobs) {
+        jobs.forEach((ScheduleInfoDto job) -> {
             List<PoiInfoDto> pois = JSON.parseArray(job.getExtend(), PoiInfoDto.class);
             int place = 0;
             boolean mark = false;
@@ -129,7 +129,7 @@ public class SearchService {
                     datalist.add(jobInfo);
                 }
             }
-        }
+        });
 
         response.setDataList(datalist);
         response.setTotal(datalist.size());
