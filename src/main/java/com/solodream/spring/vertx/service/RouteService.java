@@ -76,7 +76,6 @@ public class RouteService {
 
 
         dtos.forEach((RouteContractInfoDto dto) -> {
-//        for (RouteContractInfoDto dto : dtos) {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
             boolean mark = false;
 
