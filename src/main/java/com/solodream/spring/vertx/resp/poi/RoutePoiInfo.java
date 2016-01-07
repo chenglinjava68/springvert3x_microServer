@@ -1,53 +1,38 @@
 package com.solodream.spring.vertx.resp.poi;
 
-
-import com.solodream.spring.vertx.resp.BaseResp;
-
-import java.util.List;
 import java.util.Map;
 
 /**
- * GetPoiListResp
- *
- * @author Young
- * @version 1.0
- * @since 2015-10-01 22:16:04
+ * Created by young on 16/1/7.
  */
-public class GetPoiListResp extends BaseResp {
+public class RoutePoiInfo {
 
-    /**
-     * 总数
-     */
-    private String total;
+    private RoutePoi from;
+    private RoutePoi to;
 
-    /**
-     * 当页数据
-     */
-
-    private List<PoiInfo> dataList;
-    public String getTotal() {
-        return total;
+    public RoutePoi getFrom() {
+        return from;
     }
 
-    public void setTotal(String total) {
-        this.total = total;
+    public void setFrom(RoutePoi from) {
+        this.from = from;
     }
 
-    public List<PoiInfo> getDataList() {
-        return dataList;
+    public RoutePoi getTo() {
+        return to;
     }
 
-    public void setDataList(List<PoiInfo> dataList) {
-        this.dataList = dataList;
+    public void setTo(RoutePoi to) {
+        this.to = to;
     }
 
-    public static class PoiInfo {
+    public static class RoutePoi {
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
 
-            PoiInfo poiInfo = (PoiInfo) o;
+            RoutePoi poiInfo = (RoutePoi) o;
 
             if (!longitude.equals(poiInfo.longitude)) return false;
             return latitude.equals(poiInfo.latitude);
@@ -65,7 +50,7 @@ public class GetPoiListResp extends BaseResp {
          * id
          */
         private String id;
-        
+
         /**
          * 名字
          */
@@ -102,24 +87,24 @@ public class GetPoiListResp extends BaseResp {
         private Integer radius;
 
         private String type;
-        
+
         /**
          * 公司id
          */
         private String companyId;
-                
+
         private String companyName;
-        
+
         private String customerId;
-        
+
         private String customerName;
-        
+
         private String customerPhone;
-        
+
         private String updateBy;
 
         private String updateTime;
-        
+
         /**
          * 自定义属性
          */
@@ -221,44 +206,44 @@ public class GetPoiListResp extends BaseResp {
             this.latitude = latitude;
         }
 
-		public String getRemark() {
-			return remark;
-		}
+        public String getRemark() {
+            return remark;
+        }
 
-		public void setRemark(String remark) {
-			this.remark = remark;
-		}
+        public void setRemark(String remark) {
+            this.remark = remark;
+        }
 
-		public String getCompanyName() {
-			return companyName;
-		}
+        public String getCompanyName() {
+            return companyName;
+        }
 
-		public void setCompanyName(String companyName) {
-			this.companyName = companyName;
-		}
+        public void setCompanyName(String companyName) {
+            this.companyName = companyName;
+        }
 
-		public String getCustomerPhone() {
-			return customerPhone;
-		}
+        public String getCustomerPhone() {
+            return customerPhone;
+        }
 
-		public void setCustomerPhone(String customerPhone) {
-			this.customerPhone = customerPhone;
-		}
+        public void setCustomerPhone(String customerPhone) {
+            this.customerPhone = customerPhone;
+        }
 
-		public String getCustomerName() {
-			return customerName;
-		}
+        public String getCustomerName() {
+            return customerName;
+        }
 
-		public void setCustomerName(String customerName) {
-			this.customerName = customerName;
-		}
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
+        }
 
-		public String getType() {
-			return type;
-		}
+        public String getType() {
+            return type;
+        }
 
-		public void setType(String type) {
-			this.type = type;
-		}
+        public void setType(String type) {
+            this.type = type;
+        }
     }
 }

@@ -8,6 +8,8 @@ import com.solodream.spring.vertx.mapper.PoiInfoMapper;
 import com.solodream.spring.vertx.mapper.RouteInfoMapper;
 import com.solodream.spring.vertx.req.client.GetRouteDetailReq;
 import com.solodream.spring.vertx.resp.poi.GetPoiListResp;
+import com.solodream.spring.vertx.resp.poi.GetRoutePoiListResp;
+import com.solodream.spring.vertx.resp.poi.RoutePoiInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -101,7 +103,7 @@ public class RouteService {
     }
 
 
-    public GetPoiListResp list(GetRouteDetailReq request) {
+    public GetRoutePoiListResp list(GetRouteDetailReq request) {
         RouteContractInfoDto routeContractInfoDto = new RouteContractInfoDto();
         if (request.getCustomerId() != null)
             routeContractInfoDto.setCustomerId(Integer.parseInt(request.getCustomerId()));
@@ -109,12 +111,13 @@ public class RouteService {
             routeContractInfoDto.setContractId(Integer.parseInt(request.getContractId()));
         List<RouteContractInfoDto> dtos = routeInfoMapper.querys(routeContractInfoDto, request.getKeyword());
         List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
-
+        List<RoutePoiInfo> dataList = new ArrayList<RoutePoiInfo>();
+        RoutePoiInfo info=new RoutePoiInfo();
         dtos.forEach((RouteContractInfoDto dto) -> {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
 
             PoiInfoDto poi = pois.get(0);
-            GetPoiListResp.PoiInfo poiresp = new GetPoiListResp.PoiInfo();
+            RoutePoiInfo.RoutePoi poiresp=new RoutePoiInfo.RoutePoi();
             poiresp.setLongitude(poi.getLongitude());
             poiresp.setLatitude(poi.getLatitude());
             poiresp.setPostCode(poi.getPostcode());
@@ -123,10 +126,11 @@ public class RouteService {
             poiresp.setCompanyId(poi.getCompanyId());
             poiresp.setCustomerId(poi.getCustomerId());
             poiresp.setId(poi.getId());
-            routeSet.add(poiresp);
+            info.setFrom(poiresp);
+
 
             PoiInfoDto poilast = pois.get(pois.size() - 1);
-            GetPoiListResp.PoiInfo poiresplast = new GetPoiListResp.PoiInfo();
+            RoutePoiInfo.RoutePoi poiresplast=new RoutePoiInfo.RoutePoi();
             poiresplast.setLongitude(poilast.getLongitude());
             poiresplast.setLatitude(poilast.getLatitude());
             poiresplast.setPostCode(poilast.getPostcode());
@@ -135,12 +139,15 @@ public class RouteService {
             poiresplast.setCompanyId(poilast.getCompanyId());
             poiresplast.setCustomerId(poilast.getCustomerId());
             poiresplast.setId(poilast.getId());
-            routeSet.add(poiresplast);
+            info.setTo(poiresplast);
+
+            dataList.add(info);
         });
 
-        GetPoiListResp resp = new GetPoiListResp();
-        resp.setDataList(routeSet);
-        resp.setTotal(String.valueOf(routeSet.size()));
+        GetRoutePoiListResp resp = new GetRoutePoiListResp();
+
+        resp.setDataList(dataList);
+        resp.setTotal("1");
         return resp;
     }
 }
