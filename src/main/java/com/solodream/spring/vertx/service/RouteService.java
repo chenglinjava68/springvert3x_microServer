@@ -1,6 +1,7 @@
 package com.solodream.spring.vertx.service;
 
 import com.alibaba.fastjson.JSON;
+import com.solodream.spring.vertx.common.SoloConstants;
 import com.solodream.spring.vertx.common.DistanceUtil;
 import com.solodream.spring.vertx.jpa.domain.PoiInfoDto;
 import com.solodream.spring.vertx.jpa.domain.RouteContractInfoDto;
@@ -146,7 +147,7 @@ public class RouteService {
         });
         GetRoutePoiListResp resp = new GetRoutePoiListResp();
         resp.setDataList(dataList);
-        resp.setTotal("1");
+        resp.setTotal(SoloConstants.DEFAULT_TOTAL);
         return resp;
     }
 }
