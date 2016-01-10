@@ -1,8 +1,8 @@
 package com.solodream.spring.vertx.service;
 
 import com.alibaba.fastjson.JSON;
-import com.solodream.spring.vertx.common.SoloConstants;
 import com.solodream.spring.vertx.common.DistanceUtil;
+import com.solodream.spring.vertx.common.SoloConstants;
 import com.solodream.spring.vertx.jpa.domain.PoiInfoDto;
 import com.solodream.spring.vertx.jpa.domain.RouteContractInfoDto;
 import com.solodream.spring.vertx.mapper.PoiInfoMapper;
@@ -112,10 +112,10 @@ public class RouteService {
             routeContractInfoDto.setContractId(Integer.parseInt(request.getContractId()));
         }
         List<RouteContractInfoDto> dtos = routeInfoMapper.querys(routeContractInfoDto, request.getKeyword());
-        List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<GetPoiListResp.PoiInfo>();
+        List<GetPoiListResp.PoiInfo> routeSet = new ArrayList<>();
         List<RoutePoiInfo> dataList = new ArrayList<RoutePoiInfo>();
         RoutePoiInfo info = new RoutePoiInfo();
-        dtos.forEach((RouteContractInfoDto dto) -> {
+        dtos.stream().forEach((RouteContractInfoDto dto) -> {
             List<PoiInfoDto> pois = JSON.parseArray(dto.getExtend(), PoiInfoDto.class);
 
             PoiInfoDto poi = pois.get(0);
