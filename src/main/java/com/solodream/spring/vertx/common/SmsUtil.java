@@ -19,7 +19,7 @@ public class SmsUtil {
             HttpClient httpclient = new DefaultHttpClient();
             // 目标地址
 
-            HttpPost httppost = new HttpPost("http://sz.ipyy.com/sms.aspx?action=send&userid=&account=szzd00285&password=123456&mobile=13857175401&content=您好，您的验证码是111456【技协帮&sendTime=&extno=");
+            HttpPost httppost = new HttpPost("http://sz.ipyy.com/sms.aspx?action=send&userid=&account=dddd&password=123456&mobile=13857175401&content=您好，您的验证码是111456【技协帮&sendTime=&extno=");
             // 构造最简单的字符串数据
             StringEntity reqEntity = new StringEntity("&msg=" + msg, "UTF-8");
             // 设置类型
