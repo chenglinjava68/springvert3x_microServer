@@ -26,6 +26,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 public class RedisConfig extends CachingConfigurerSupport {
     private String host;
     private int port;
+    private String password;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getHost() {
         return host;
@@ -47,8 +56,9 @@ public class RedisConfig extends CachingConfigurerSupport {
     public JedisConnectionFactory redisConnectionFactory() {
         JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
         jedisConnectionFactory.setUsePool(true);
-        jedisConnectionFactory.setHostName(host);
-        jedisConnectionFactory.setPort(port);
+        jedisConnectionFactory.setHostName("r-m5e786cb602b9124.redis.rds.aliyuncs.com");
+        jedisConnectionFactory.setPort(6379);
+        jedisConnectionFactory.setPassword("Nstlc20435DFD0rtgdf43gsd34u489");
         return jedisConnectionFactory;
     }
 

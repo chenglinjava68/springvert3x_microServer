@@ -1,10 +1,14 @@
 package com.solodream.spring.vertx.vertx;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.TypeReference;
+import com.solodream.spring.vertx.req.JsonReq;
+import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
 import com.solodream.spring.vertx.resp.BaseResp;
 import com.solodream.spring.vertx.resp.job.ProfileResponse;
 import com.solodream.spring.vertx.service.RedisCacheService;
 import io.vertx.core.AbstractVerticle;
+import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +23,8 @@ import java.util.Random;
  * @date 2015/11/24 0024
  */
 @Component
-public class SmsVerticle extends AbstractVerticle {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SmsVerticle.class);
+public class RegisterVerticle extends AbstractVerticle {
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegisterVerticle.class);
 
     @Autowired
     private RedisCacheService redisCacheService;
@@ -29,34 +33,33 @@ public class SmsVerticle extends AbstractVerticle {
     public void start() {
         LOGGER.info("start.");
 
-        vertx.eventBus().consumer("sms", message -> {
+        vertx.eventBus().consumer("register", message -> {
             LOGGER.info("Received a message: {}, {}", message.body(), message.headers());
             try {
                 //semd message
-                String mobile = (String) message.body();
-                String randomStr = getSix();
-                // redisCacheService.put("SMS_CODE_" + mobile, randomStr, 5 * 60);
+                JsonObject jsonString = (JsonObject) message.body();
+                JsonReq<UserLoginRequestParam> obj = JSON.parseObject(jsonString.toString(), new TypeReference<JsonReq<UserLoginRequestParam>>() {
+                });
+                String username = obj.getParam().getUsername();
+                String password = obj.getParam().getPassword();
+                String smsCode = obj.getParam().getSmsCode();
+                LOGGER.info("username is {},password is {}", username, password);
+
                 BaseResp<ProfileResponse> resp = new BaseResp<ProfileResponse>();
                 ProfileResponse response = new ProfileResponse();
-                response.setMobile("138577132321");
+                response.setUserid(1);
                 resp.setData(response);
                 resp.setCode(0);
                 message.reply(JSON.toJSONString(resp));
+
+//                if (redisCacheService.get("SMS_CODE_" + username).equals(smsCode)) {
+//                    message.reply("success");
+//                }
             } catch (Exception e) {
                 LOGGER.error("convert error.", e);
             }
         });
     }
 
-    public static String getSix() {
-        Random rad = new Random();
-
-        String result = rad.nextInt(1000000) + "";
-
-        if (result.length() != 6) {
-            return getSix();
-        }
-        return result;
-    }
 
 }

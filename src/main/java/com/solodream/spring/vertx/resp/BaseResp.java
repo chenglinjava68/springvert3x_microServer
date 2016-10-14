@@ -7,7 +7,7 @@ import org.weakref.jmx.Managed;
  */
 public class BaseResp<T extends BaseResp> {
 
-    private int code = 100;
+    private int code;
     private String msg;
     private T data;
 

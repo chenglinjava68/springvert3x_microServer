@@ -5,7 +5,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.solodream.spring.vertx.jpa.domain.ClientAccountInfoDto;
 import com.solodream.spring.vertx.req.JsonReq;
 import com.solodream.spring.vertx.req.client.UserLoginRequestParam;
-import com.solodream.spring.vertx.service.ClientService;
+import com.solodream.spring.vertx.service.UserService;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 import org.slf4j.Logger;
@@ -24,7 +24,7 @@ public class LoginVerticle extends AbstractVerticle {
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginVerticle.class);
 
     @Autowired
-    private ClientService clientService;
+    private UserService clientService;
 
     public void start() {
         vertx.eventBus().consumer("login", message -> {
@@ -36,14 +36,18 @@ public class LoginVerticle extends AbstractVerticle {
                 String username = obj.getParam().getUsername();
                 String password = obj.getParam().getPassword();
                 LOGGER.info("username is {},password is {}", username, password);
-                ClientAccountInfoDto dto = clientService.login(username);
-                if (dto != null && dto.getPassword().equals(password)) {
-                    LOGGER.info("this {} login ", username);
-                    message.reply(JSON.toJSONString(dto));
-                } else {
-                    LOGGER.info("this username or password is wrong");
-                    message.fail(1201, "this username or password is wrong");
-                }
+
+                ClientAccountInfoDto dto = new ClientAccountInfoDto();
+                dto.setAccount("chenyang");
+                message.reply(JSON.toJSONString(dto));
+//                ClientAccountInfoDto dto = clientService.login(username);
+//                if (dto != null && dto.getPassword().equals(password)) {
+//                    LOGGER.info("this {} login ", username);
+//                    message.reply(JSON.toJSONString(dto));
+//                } else {
+//                    LOGGER.info("this username or password is wrong");
+//                    message.fail(1201, "this username or password is wrong");
+//                }
             } catch (Exception e) {
                 LOGGER.error("convert error.", e);
             }

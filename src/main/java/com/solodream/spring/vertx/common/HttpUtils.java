@@ -29,13 +29,20 @@ import java.util.Map;
 
 /**
  * HttpUtils 处理http请求
- * 
+ * <p>
  * https://hc.apache.org/httpcomponents-client-ga/tutorial/html/connmgmt.html
- * 
+ *
  * @author dz
- * 
  */
 public class HttpUtils {
+
+    public static void main(String[] args) throws IOException {
+
+
+        String url = "http://sz.ipyy.com/smsJson.aspx?action=send&userid=&account=szzd00285&password=123456&mobile=13857175401&content=欢迎关注[技协帮]&sendTime=&extno=";
+
+        HttpUtils.post(url, null);
+    }
 
     private static final Logger LOG = LoggerFactory.getLogger(HttpUtils.class);
 
@@ -77,7 +84,7 @@ public class HttpUtils {
         return request(new HttpGet(url), null, null, null);
     }
 
-        private static String request(HttpRequestBase httpRequest, List<Header> headers, List<NameValuePair> nvps, String postData) throws IOException,
+    private static String request(HttpRequestBase httpRequest, List<Header> headers, List<NameValuePair> nvps, String postData) throws IOException,
             ClientProtocolException {
 
         String result = "";
@@ -96,7 +103,7 @@ public class HttpUtils {
             }
 
             if (postData != null && httpRequest instanceof HttpPost) {
-                ((HttpPost) httpRequest).setEntity(new StringEntity(postData,"UTF-8"));
+                ((HttpPost) httpRequest).setEntity(new StringEntity(postData, "GBK"));
             }
 
             response = httpClient.execute(httpRequest);

@@ -4,7 +4,8 @@
 
 # APPLICATION SETTINGS
 redis:
-    host: 127.0.0.1
+    host: 114.55.178.173
     port: 6379
+    password: chenyang2016
 logging:
     config: /log4j2.xml

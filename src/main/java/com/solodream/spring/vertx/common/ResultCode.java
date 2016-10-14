@@ -6,7 +6,7 @@ package com.solodream.spring.vertx.common;
 
 public enum ResultCode {
 
-    SUCCESS(100),
+    SUCCESS(0),
 
     SYS_REQ_PARAM_CONTENT_OVERFLOW(201),
 

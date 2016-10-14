@@ -10,44 +10,10 @@ public class LoginResponse extends BaseResp {
     private String refreshToken;
     private String accessTokenExpire;
     private String refreshTokenExpire;
-    private String companyId;
-    private String companyName;
-    private String contractId;
-    private String contractName;
-    private String customerId;
-    private String customerName;
-
-    public String getContractId() {
-        return contractId;
-    }
-
-    public void setContractId(String contractId) {
-        this.contractId = contractId;
-    }
-
-    public String getContractName() {
-        return contractName;
-    }
-
-    public void setContractName(String contractName) {
-        this.contractName = contractName;
-    }
-
-    public String getCustomerId() {
-        return customerId;
-    }
-
-    public void setCustomerId(String customerId) {
-        this.customerId = customerId;
-    }
-
-    public String getCustomerName() {
-        return customerName;
-    }
-
-    public void setCustomerName(String customerName) {
-        this.customerName = customerName;
-    }
+    private int userId;
+    private String userMobile;
+    private String state;
+    private String photoUrl;
 
     public String getAccessToken() {
         return accessToken;
@@ -81,19 +47,35 @@ public class LoginResponse extends BaseResp {
         this.refreshTokenExpire = refreshTokenExpire;
     }
 
-    public String getCompanyId() {
-        return companyId;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public String getCompanyName() {
-        return companyName;
+    public String getUserMobile() {
+        return userMobile;
     }
 
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
+    public void setUserMobile(String userMobile) {
+        this.userMobile = userMobile;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }

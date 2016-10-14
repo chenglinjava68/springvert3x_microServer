@@ -4,6 +4,8 @@ public class BaseGetListReq<T extends BaseGetListReq> extends BaseReq {
 
     protected static final int DEFAULT_LENGTH = 20;
 
+    private String searchWords;
+
     /**
      * 起始位置
      */
@@ -22,7 +24,26 @@ public class BaseGetListReq<T extends BaseGetListReq> extends BaseReq {
 
     private String token;
 
+
     private T param;
+
+    public String getSearchWords() {
+        return searchWords;
+    }
+
+    public void setSearchWords(String searchWords) {
+        this.searchWords = searchWords;
+    }
+
+    @Override
+    public String getToken() {
+        return token;
+    }
+
+    @Override
+    public void setToken(String token) {
+        this.token = token;
+    }
 
     public String getSortKey() {
         return sortKey;

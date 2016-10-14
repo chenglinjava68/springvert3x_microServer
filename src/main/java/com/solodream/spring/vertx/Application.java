@@ -51,6 +51,21 @@ public class Application {
         vertx.deployVerticle(context.getBean(VersionVerticle.class), new DeploymentOptions().setWorker(true));
         vertx.deployVerticle(context.getBean(RouteFromVerticle.class), new DeploymentOptions().setWorker(true));
         vertx.deployVerticle(context.getBean(RouteToVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(JobVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(ProfileVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(ResumeVerticle.class), new DeploymentOptions().setWorker(true));
+
+        vertx.deployVerticle(context.getBean(CollectVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(ProfileDetailVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(ResumeDetailVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(UserFavoritesVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(UserRecordVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(TopkeyVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(AskVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(QuestionsVerticle.class), new DeploymentOptions().setWorker(true));
+        vertx.deployVerticle(context.getBean(RegisterVerticle.class), new DeploymentOptions().setWorker(true));
+
+
         vertx.deployVerticle(context.getBean(HttpServerVerticle.class));
     }
 }
